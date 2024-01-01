@@ -11,7 +11,6 @@ const SelectImage = () => {
   
   const avatarArray = []
   
-
   const handleAvatars = async () => {
     for (let i = 1; i <= 5; i++) {
       const image = `https://api.multiavatar.com/Binx%${Math.round(Math.random() * 1000)}ond.svg`

@@ -1,9 +1,11 @@
+import { setToken, setUser } from "../../slice/user";
 import { authEndPoints } from "../api";
 import { apiConnector } from "../apiConnecter";
 
 const {
     GET_OTP_API,
-    SIGNUP_API
+    SIGNUP_API,
+    LOGIN_API
 } = authEndPoints
 
 
@@ -38,6 +40,27 @@ export const createAccount = async (data) => {
     }
     catch (error) {
         console.log("signup  RESPONSE  API ERROR....", error);
+       
+    }
+
+}
+
+export const loginUser = async (data,dispatch) => {
+    try {
+        const response = await apiConnector("POST",
+         LOGIN_API,
+         data,
+         );
+        console.log("Login  response", response);
+
+         localStorage.setItem("token",JSON.stringify(response.data.token))
+         localStorage.setItem("user",JSON.stringify(response.data.user))
+         dispatch(setToken(response.data.token))
+         dispatch(setUser(response.data.user))
+        
+    }
+    catch (error) {
+        console.log("Login  RESPONSE  API ERROR....", error);
        
     }
 
