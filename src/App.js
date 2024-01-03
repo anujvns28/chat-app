@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import VerfyEmail from "./pages/VerfyEmail";
 import SelectImage from "./pages/SelectImage";
+import Request from "./pages/Request";
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
       <Route path="/signup" element={<Signup/>}></Route>
       <Route path="/verfyEmail" element={<VerfyEmail/>} />
       <Route path="/selectImage" element= {<SelectImage/>} />
+      <Route path="/request/:token" element= {<Request/>} />
      </Routes>
     </div>
   );
