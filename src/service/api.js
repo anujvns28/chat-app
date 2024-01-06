@@ -7,5 +7,7 @@ export const authEndPoints = {
 }
 
 export const userEndPoints = {
-    ACCEPT_FRAIND_REQUST_API : BASE_URL + "/user/acceptRequest"
+    ACCEPT_FRAIND_REQUST_API : BASE_URL + "/user/acceptRequest",
+    SEND_FRAIND_REQUST_API : BASE_URL + "/user/sendRequest",
+    FETCH_CONTACT_API : BASE_URL + "/user/fetchContact"
 }

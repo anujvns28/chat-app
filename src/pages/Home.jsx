@@ -9,6 +9,7 @@ import { IoFilterOutline } from "react-icons/io5";
 import { IoIosSearch } from "react-icons/io";
 import Contact from '../componetns/common/Contact';
 import { fetchContact } from '../service/operations/user';
+import SendfraindRequest from '../componetns/common/SendfraindRequest';
 
 
 const Home = () => {
@@ -17,48 +18,31 @@ const Home = () => {
   const {user} = useSelector((state) => state.user);
   const [userData,setUserData] = useState();
   const [contact,setContact] = useState();
+  const [fraindRequest,setFraindRequest] = useState(false)
 
-  const links = [
-    {
-      icon : <BsChatLeftDots/>,
-      link : "/"
-    },
-    {
-      icon : <BsRecordCircle/>,
-      link : "/"
-    },
-    {
-      icon : <BiCommentAdd/>,
-      link : "/"
-    },
-    {
-      icon : <BsThreeDotsVertical/>,
-      link : "/"
-    },
 
-  ]
-  
-
-  const isUserLogin = () => {
+  const isUserLogin = async () => {
    if(!token){
     navigate("/login")
    }else{
     setUserData(user)
+    const result = await fetchContact(user._id);
+    if(result){
+      console.log(result,"printing result")
+      setContact(result.data.data)
+    }
    }
   }
 
-  const getContact = () => {
-    const result = fetchContact(user._id)
-    if(result){
-      setContact(result)
-    }
-  }
+  
 
 
   useEffect(() => {
     isUserLogin();
-    getContact();
+   
   },[])
+
+  
   return (
     <div>
       {
@@ -66,7 +50,7 @@ const Home = () => {
         ? <div className='flex w-screen h-screen border flex-row gap-1 border-black p-5'>
       <div className='w-[30%] border h-full border-black flex flex-col gap-1'>
       <div className='h-[115px] w-full  flex flex-col gap-1  '>
-      <div className='h-[70px] w-full  bg-slate-30 flex justify-between bg-slate-200 px-4'>
+      <div className='h-[70px] w-full  bg-slate-30 flex justify-between bg-slate-200 px-4 '>
         <div className=' w-[100px] h-full  flex items-center '>
         <img
         className='w-[50px] h-[50px] rounded-full'
@@ -74,14 +58,17 @@ const Home = () => {
         />
         </div>
         <div className='flex flex-row gap-8 items-center justify-end w-[60%] text-xl '>
-         {
-          links.map((item) =>{
-            return <div className='text-slate-700'>
-              <Link to={item.link}>{item.icon}</Link>
-            </div>
-          })
-         }
+         <p 
+         onClick={() => setFraindRequest(!fraindRequest)}
+         className='cursor-pointer'><BsChatLeftDots/></p>
+         <p className='cursor-pointer'><BsRecordCircle/></p>
+         <p className='cursor-pointer'><BiCommentAdd/></p>
+         <p className='cursor-pointer'><BsThreeDotsVertical/></p>
         </div>
+        {
+         fraindRequest  && <div> <SendfraindRequest /></div>
+        }
+       
       </div>
       <div className='h-[45px] w-full  px-3 flex flex-row py-1 '>
         
@@ -101,17 +88,18 @@ const Home = () => {
 
       </div>
       </div>
-      <div className='h-full w-full border border-green-500'>
+      <div className='h-full w-full border border-green-500 p-2 flex flex-col gap-2'>
         {
-          contact && <div>
+          contact ? <div className=''>
             {
           contact.map((contact) => {
-            return <div>
+            return <div className='flex flex-col gap-2'>
               <Contact userData={contact}/>
             </div>
           })
         }
           </div>
+          : <div>Loading..</div>
         }
        
       </div>
