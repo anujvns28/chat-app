@@ -1,10 +1,17 @@
 import React from 'react'
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom'
+import { setCurrentChat } from '../../slice/currentChat';
 
 const Contact = ({userData}) => {
-    console.log(userData,"printing user data form contact")
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+    
   return (
-    <div className='border border-black w-full flex flex-row justify-between p-2'>
-      <div className='flex flex-row gap-3'>
+    <div  onClick={() => dispatch(setCurrentChat(userData))}
+    className='border border-black w-full flex flex-row justify-between p-2 cursor-pointer'>
+      <div
+      className='flex flex-row gap-3 '>
       <div>
         <img className='w-[50px] h-[50px] rounded-full'
         src={userData.image} />

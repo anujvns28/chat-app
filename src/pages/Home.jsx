@@ -10,6 +10,7 @@ import { IoIosSearch } from "react-icons/io";
 import Contact from '../componetns/common/Contact';
 import { fetchContact } from '../service/operations/user';
 import SendfraindRequest from '../componetns/common/SendfraindRequest';
+import Chat from '../componetns/common/Chat';
 
 
 const Home = () => {
@@ -90,7 +91,7 @@ const Home = () => {
       </div>
       <div className='h-full w-full border border-green-500 p-2 flex flex-col gap-2'>
         {
-          contact ? <div className=''>
+          contact ? <div className='flex flex-col gap-2'>
             {
           contact.map((contact) => {
             return <div className='flex flex-col gap-2'>
@@ -105,11 +106,8 @@ const Home = () => {
       </div>
      </div>
 
-     <div className='w-[70%] border h-full  border-black flex flex-col gap-1'>
-     <div className='h-[80px] w-full border bg-slate-3 00'></div>
-      <div className='h-full w-full border border-green-500'>
-      
-      </div>
+     <div className='w-[70%]'>
+        <Chat/>
      </div>
      
      

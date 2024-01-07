@@ -11,3 +11,8 @@ export const userEndPoints = {
     SEND_FRAIND_REQUST_API : BASE_URL + "/user/sendRequest",
     FETCH_CONTACT_API : BASE_URL + "/user/fetchContact"
 }
+
+export const chatEndPoints = {
+    SEND_MSZ_API : BASE_URL + "/chat/sendMsz",
+    FETCH_MSZ_API : BASE_URL + '/chat/fetchedChat'
+}
