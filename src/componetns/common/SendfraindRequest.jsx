@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import SubmmitButton from './SubmmitButton'
 import { useSelector } from 'react-redux';
 import { sendFraindRequest } from '../../service/operations/user';
+import { RxCross1 } from "react-icons/rx";
 
-const SendfraindRequest = () => {
+const SendfraindRequest = ({setFraindRequest}) => {
     const [email,setEmail] = useState();
     const {user} = useSelector((state) => state.user);
 
@@ -17,9 +18,14 @@ const SendfraindRequest = () => {
         await sendFraindRequest(data)
     }
   return (
-   <form onSubmit={handleSubmit}
-   className='w-[25%] absolute bg-slate-400 border border-black p-4'>
-    <label className='w-full border border-black'>
+   <div className='fixed inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm'>
+    <form onSubmit={handleSubmit}
+   className='w-[25%] absolute bg-slate-400 border border-black p-4 rounded-md flex flex-col gap-2'>
+   <div className='flex w-full justify-end'> 
+   <p onClick={() => setFraindRequest(false)}
+   className='text-xl font-semibold p-2 cursor-pointer'><RxCross1/></p></div>
+    <p className='text-xl font-semibold'>Send Fraind Request to your Frainds</p>
+    <label className='w-full '>
         <p>Enter email</p>
         <input
         name='email'
@@ -30,9 +36,10 @@ const SendfraindRequest = () => {
         />
     </label>
    <button>
-   <SubmmitButton text={"Send"}/>
+   <SubmmitButton text={"Send Request"}/>
    </button>
    </form>
+   </div>
   )
 }
 

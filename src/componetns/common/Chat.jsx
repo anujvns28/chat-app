@@ -53,8 +53,8 @@ const Chat = () => {
     <div className='w-full h-full'>
      {
         !chat ? <div className='h-full w-full flex items-center justify-center text-xl font-semibold'>You Have not Seleced any chat</div>
-        :  <div className='w-[100%] border h-full  border-black flex flex-col gap-1'>
-        <div className='h-[80px] w-full border bg-slate-200 flex flex-row justify-between p-2'>
+        :  <div className='w-[100%]  border h-full  border-black flex flex-col gap-1'>
+        <div className='h-[80px] w-full mb-2 bg-slate-200 flex flex-row justify-between p-2'>
          <div className='flex flex-row gap-2'>
          <div>
          <img className='w-[50px] h-[50px] rounded-full'
@@ -72,9 +72,9 @@ const Chat = () => {
             <p className='cursor-pointer'><BsThreeDotsVertical/></p>
          </div>
         </div>
-         <div className='h-full w-full border border-green-500 flex flex-col justify-between'>
+         <div className='h-[88%] w-full  flex flex-col justify-between '>
         {/* chats */}
-         <div className='w-full h-full'>
+         <div className='w-full  h-[87%] overflow-auto  sticky top-3'>
           {
             !chats ? <div className='flex h-full items-center justify-center font-semibold text-xl'>
               <p>Say Hello!</p>
@@ -82,11 +82,12 @@ const Chat = () => {
             : <div className='flex flex-col gap-4'>
                {
                 chats.map((item) => {
-                  return <div className='  text-black w-full'>
+                  return <div className={`text-black px-10 w-full flex ${item.senderId == user._id ? "justify-end" : "justify-start" }`}>
                     
-                    <span className={`${item.senderId == user._id ? "bg-green-500 w-auto items-end text-black" : "bg-slate-500"} p-2 rounded-md `}>
+                    <p className={`${item.senderId == user._id ? "bg-green-500 w-fit text-black" : "bg-slate-500 w-fit items-center flex"}
+                     p-2 rounded-md max-w-[40%] `}>
                       {item.msz}
-                     </span>
+                     </p>
                    
                   </div>
                 })
@@ -96,7 +97,7 @@ const Chat = () => {
          </div>
 
          {/* inputs */}
-         <div className='h-[60px]  w-full border bg-slate-200 flex flex-row justify-between p-2'>
+         <div className='h-[60px]  w-full  bg-slate-200 flex flex-row justify-between p-2'>
          <form onSubmit={handleSubmit}
          className='w-full flex flex-row gap-2'>
           <input 

@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { userEndPoints } from "../api";
 import { apiConnector } from "../apiConnecter";
 
@@ -38,14 +39,17 @@ export const fetchContact = async (data) => {
 
 export const sendFraindRequest = async (data) => {
     let result
+    const loading = toast.loading("loading...")
     try {
         const response = await apiConnector("POST",SEND_FRAIND_REQUST_API,data);
         console.log("send fraind request response", response);
         result = response
+        toast.success("Fraind Request Sent Successfully")
     }
     catch (error) {
         console.log("send fraind request RESPONSE  API ERROR....", error);
-       
+        toast.error("Error in Sending Fraind Request")
     }
+    toast.dismiss(loading);
     return result
 }
