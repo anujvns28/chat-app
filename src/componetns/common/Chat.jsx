@@ -6,12 +6,13 @@ import { useSelector } from 'react-redux'
 import SubmmitButton from './SubmmitButton';
 import { fetchMsz, sendMsz } from '../../service/operations/chat';
 
-const Chat = () => {
+const Chat = ({socket}) => {
     const {chat} = useSelector((state) => state.chat);
     const {user} = useSelector((state) => state.user);
     const [time,setTime] = useState(true);
     const [msz,setMsz] = useState();
     const [chats,setChats] = useState();
+    const [currentMsz,setCurrentMsz] = useState()
 
 
     setTimeout(() => setTime(false),7000)
@@ -23,10 +24,17 @@ const Chat = () => {
         chatId : chat._id,
         userId : user._id
       }
-      const result = await sendMsz(data)
-      if(result){
-        console.log("sending msz ",result)
+      // const result = await sendMsz(data)
+      // if(result){
+      //   console.log("sending msz ",result)
+      // }
+      
+      const socketData = {
+        msz:msz,
+        chatId : chat._id,
+        senderId : user._id
       }
+      socket.emit("msz",socketData)
     }
     
     const fetchChat = async() =>{
@@ -49,6 +57,21 @@ const Chat = () => {
     setTime(true)
     fetchChat()
     },[chat])
+
+   useEffect(() => {
+    
+      if(chats){
+        socket.on("msg-recive",(data) => {
+          console.log(data,"msg-recive")
+          const messages = [...chats]
+          messages.push(data)
+          setChats(messages)
+        })
+      }
+    
+   },[chats])
+
+
   return (
     <div className='w-full h-full'>
      {
@@ -59,11 +82,13 @@ const Chat = () => {
          <div>
          <img className='w-[50px] h-[50px] rounded-full'
          src={chat.image} />
+         
          </div>
          <div className='flex flex-col gap-2  justify-center'>
          <p className=''>{chat.name}</p>
         {time &&  <p className='text-sm font-semibold'>click here for contact view</p>}
          </div>
+         <p>{user._id}</p>
          </div>
 
          <div className='flex flex-row gap-7 items-center justify-center text-xl px-3'>

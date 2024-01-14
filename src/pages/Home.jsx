@@ -12,7 +12,9 @@ import { fetchContact } from '../service/operations/user';
 import SendfraindRequest from '../componetns/common/SendfraindRequest';
 import Chat from '../componetns/common/Chat';
 import { toast } from 'react-toastify';
+import io from "socket.io-client"
 
+const socket = io("http://localhost:4000");
 
 const Home = () => {
   const navigate = useNavigate();
@@ -44,16 +46,25 @@ const Home = () => {
     }else{
       setOutherFeture(false)
     }
-    console.log(otherFeautre)
+   
   })
-
-
 
 
   useEffect(() => {
     isUserLogin();
 
   }, [])
+
+  useEffect(() =>{
+  if(user){
+    socket.emit("add-user",{
+      userId : user._id
+    })
+
+  }else{
+    return
+  }
+  },[user])
 
 
 
@@ -70,6 +81,7 @@ const Home = () => {
                       className='w-[50px] h-[50px] rounded-full'
                       src={userData.image}
                     />
+                    
                   </div>
                   <div className='flex  flex-row gap-8 items-center justify-end w-[60%] text-xl '>
                     <p className='cursor-pointer'><BsChatLeftDots /></p>
@@ -77,7 +89,8 @@ const Home = () => {
                     <p
                       onClick={() => setFraindRequest(!fraindRequest)}
                       className='cursor-pointer'><BiCommentAdd /></p>
-                    <div  onClick={() => setOutherFeture(!otherFeautre)}
+                    <div  
+                    // onClick={() => setOutherFeture(!otherFeautre)}
                     className='cursor-pointer relative'>
                       <p 
                       ref={otherFetureRef}
@@ -138,7 +151,7 @@ const Home = () => {
             </div>
 
             <div className='w-[70%]'>
-              <Chat />
+              <Chat socket={socket}/>
             </div>
 
             {
