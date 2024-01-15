@@ -18,8 +18,9 @@ const Contact = ({userData}) => {
       </div>
       <div className='flex flex-col gap-1 pt-y'>
           <p>{userData.name}</p>
-          <p>hii</p>
+          <p>{userData.email}</p>
       </div>
+     
       </div>
       <div></div>
     </div>

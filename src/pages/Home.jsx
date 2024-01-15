@@ -81,7 +81,7 @@ const Home = () => {
                       className='w-[50px] h-[50px] rounded-full'
                       src={userData.image}
                     />
-                    
+                    <p>{user.email}</p>
                   </div>
                   <div className='flex  flex-row gap-8 items-center justify-end w-[60%] text-xl '>
                     <p className='cursor-pointer'><BsChatLeftDots /></p>

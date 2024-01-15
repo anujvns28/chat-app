@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { IoVideocam } from "react-icons/io5";
 import { IoSearchSharp } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useSelector } from 'react-redux'
 import SubmmitButton from './SubmmitButton';
 import { fetchMsz, sendMsz } from '../../service/operations/chat';
+import EmojiPicker from 'emoji-picker-react';
+import { BsEmojiGrin } from "react-icons/bs";
+
 
 const Chat = ({socket}) => {
     const {chat} = useSelector((state) => state.chat);
@@ -12,8 +15,10 @@ const Chat = ({socket}) => {
     const [time,setTime] = useState(true);
     const [msz,setMsz] = useState();
     const [chats,setChats] = useState();
-    const [currentMsz,setCurrentMsz] = useState()
-
+    const [showEmoji,setShowemoji] = useState()
+    const scrollRef = useRef();
+    const emojiRef = useRef();
+    const emojiContaierRef = useRef();
 
     setTimeout(() => setTime(false),7000)
    
@@ -24,10 +29,10 @@ const Chat = ({socket}) => {
         chatId : chat._id,
         userId : user._id
       }
-      // const result = await sendMsz(data)
-      // if(result){
-      //   console.log("sending msz ",result)
-      // }
+      const result = await sendMsz(data)
+      if(result){
+        console.log("sending msz ",result)
+      }
       
       const socketData = {
         msz:msz,
@@ -35,6 +40,8 @@ const Chat = ({socket}) => {
         senderId : user._id
       }
       socket.emit("msz",socketData)
+
+      setMsz("")
     }
     
     const fetchChat = async() =>{
@@ -58,6 +65,8 @@ const Chat = ({socket}) => {
     fetchChat()
     },[chat])
 
+
+
    useEffect(() => {
     
       if(chats){
@@ -72,10 +81,26 @@ const Chat = ({socket}) => {
    },[chats])
 
 
+   useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chats]);
+
+  // adding event litinor
+  window.addEventListener("click",(e) => {
+   
+    if(emojiRef.current != e.target){
+      setShowemoji(false)
+    }else{
+      return
+    }
+  })
+
+  console.log(emojiContaierRef.current,"this is containrer")
   return (
     <div className='w-full h-full'>
      {
-        !chat ? <div className='h-full w-full flex items-center justify-center text-xl font-semibold'>You Have not Seleced any chat</div>
+        !chat ? <div 
+        className='h-full w-full flex items-center justify-center text-xl font-semibold'>You Have not Seleced any chat</div>
         :  <div className='w-[100%]  border h-full  border-black flex flex-col gap-1'>
         <div className='h-[80px] w-full mb-2 bg-slate-200 flex flex-row justify-between p-2'>
          <div className='flex flex-row gap-2'>
@@ -88,7 +113,7 @@ const Chat = ({socket}) => {
          <p className=''>{chat.name}</p>
         {time &&  <p className='text-sm font-semibold'>click here for contact view</p>}
          </div>
-         <p>{user._id}</p>
+         
          </div>
 
          <div className='flex flex-row gap-7 items-center justify-center text-xl px-3'>
@@ -107,7 +132,8 @@ const Chat = ({socket}) => {
             : <div className='flex flex-col gap-4'>
                {
                 chats.map((item) => {
-                  return <div className={`text-black px-10 w-full flex ${item.senderId == user._id ? "justify-end" : "justify-start" }`}>
+                  return <div ref={scrollRef}
+                  className={`scrollbar-h-* scrollbar  scrollbar-track-gray-100 text-black px-10 w-full flex ${item.senderId == user._id ? "justify-end" : "justify-start" }`}>
                     
                     <p className={`${item.senderId == user._id ? "bg-green-500 w-fit text-black" : "bg-slate-500 w-fit items-center flex"}
                      p-2 rounded-md max-w-[40%] `}>
@@ -124,15 +150,32 @@ const Chat = ({socket}) => {
          {/* inputs */}
          <div className='h-[60px]  w-full  bg-slate-200 flex flex-row justify-between p-2'>
          <form onSubmit={handleSubmit}
-         className='w-full flex flex-row gap-2'>
+         className='w-full flex flex-row gap-2 relative'>
+          <div className='flex w-full border border-black rounded-md'>
+
+          <div className='flex h-full items-center justify-center text-2xl
+           font-semibold px-3 rounded-md bg-white'>
+            <p onClick={() => setShowemoji(!showEmoji)}
+            ref={emojiRef}
+            className='cursor-pointer'><BsEmojiGrin pointerEvents="none"/></p>
+          </div>
+
           <input 
           required
+          placeholder='Type a message'
           onChange={(e) => setMsz(e.target.value)}
-          className='w-[90%]  border border-black outline-none p-2 rounded-md text-xl '
+          value={msz}
+          className='w-full  outline-none p-2 rounded-md  placeholder'
           />
+          </div>
           <button>
-            <SubmmitButton text={"Send"}/>
+            <SubmmitButton  text={"Send"}/>
           </button>
+
+          <div ref={emojiContaierRef}
+          className={`${showEmoji ? "visible" : "invisible"} absolute -top-[480px] left-6`}>
+           <EmojiPicker/>
+          </div>
          </form>
            </div>
          
