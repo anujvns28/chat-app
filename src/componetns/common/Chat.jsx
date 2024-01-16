@@ -7,18 +7,18 @@ import SubmmitButton from './SubmmitButton';
 import { fetchMsz, sendMsz } from '../../service/operations/chat';
 import EmojiPicker from 'emoji-picker-react';
 import { BsEmojiGrin } from "react-icons/bs";
+import { RxCross1 } from "react-icons/rx";
 
 
 const Chat = ({socket}) => {
     const {chat} = useSelector((state) => state.chat);
     const {user} = useSelector((state) => state.user);
     const [time,setTime] = useState(true);
-    const [msz,setMsz] = useState();
+    const [msz,setMsz] = useState("");
+    const [emoji,setEmoji] = useState('');
     const [chats,setChats] = useState();
     const [showEmoji,setShowemoji] = useState()
     const scrollRef = useRef();
-    const emojiRef = useRef();
-    const emojiContaierRef = useRef();
 
     setTimeout(() => setTime(false),7000)
    
@@ -41,7 +41,7 @@ const Chat = ({socket}) => {
       }
       socket.emit("msz",socketData)
 
-      setMsz("")
+       setMsz("")
     }
     
     const fetchChat = async() =>{
@@ -79,23 +79,24 @@ const Chat = ({socket}) => {
       }
     
    },[chats])
+ 
+   
+   const handleEmoji = (event) => {
+   setEmoji(event.emoji)
+   }
 
 
    useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chats]);
 
-  // adding event litinor
-  window.addEventListener("click",(e) => {
-   
-    if(emojiRef.current != e.target){
-      setShowemoji(false)
-    }else{
-      return
-    }
-  })
+  useEffect(() => {
+   let message = msz
+   message = message + emoji
+   setMsz(message)
+  },[emoji])
 
-  console.log(emojiContaierRef.current,"this is containrer")
+  
   return (
     <div className='w-full h-full'>
      {
@@ -127,7 +128,7 @@ const Chat = ({socket}) => {
          <div className='w-full  h-[87%] overflow-auto  sticky top-3'>
           {
             !chats ? <div className='flex h-full items-center justify-center font-semibold text-xl'>
-              <p>Say Hello!</p>
+              <p>loading...</p>
             </div>
             : <div className='flex flex-col gap-4'>
                {
@@ -154,10 +155,9 @@ const Chat = ({socket}) => {
           <div className='flex w-full border border-black rounded-md'>
 
           <div className='flex h-full items-center justify-center text-2xl
-           font-semibold px-3 rounded-md bg-white'>
+           font-semibold px-3 rounded-l-md bg-white'>
             <p onClick={() => setShowemoji(!showEmoji)}
-            ref={emojiRef}
-            className='cursor-pointer'><BsEmojiGrin pointerEvents="none"/></p>
+            className='cursor-pointer'>{showEmoji ? <RxCross1/> : <BsEmojiGrin/>}</p>
           </div>
 
           <input 
@@ -165,16 +165,16 @@ const Chat = ({socket}) => {
           placeholder='Type a message'
           onChange={(e) => setMsz(e.target.value)}
           value={msz}
-          className='w-full  outline-none p-2 rounded-md  placeholder'
+          className='w-full  outline-none p-2 rounded-r-md text-xl  placeholder'
           />
           </div>
           <button>
             <SubmmitButton  text={"Send"}/>
           </button>
 
-          <div ref={emojiContaierRef}
-          className={`${showEmoji ? "visible" : "invisible"} absolute -top-[480px] left-6`}>
-           <EmojiPicker/>
+          <div
+          className={`${showEmoji ? "visible " : "invisible"} absolute -top-[480px] left-6`}>
+          <EmojiPicker onEmojiClick={handleEmoji}/>
           </div>
          </form>
            </div>

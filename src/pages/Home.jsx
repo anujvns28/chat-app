@@ -13,6 +13,7 @@ import SendfraindRequest from '../componetns/common/SendfraindRequest';
 import Chat from '../componetns/common/Chat';
 import { toast } from 'react-toastify';
 import io from "socket.io-client"
+import SelectMember from '../componetns/core/group/SelectMember';
 
 const socket = io("http://localhost:4000");
 
@@ -20,16 +21,19 @@ const Home = () => {
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.user);
   const { user } = useSelector((state) => state.user);
+  const {chat} = useSelector((state) => state.chat)
   const [userData, setUserData] = useState();
   const [contact, setContact] = useState();
   const [fraindRequest, setFraindRequest] = useState(false);
   const [otherFeautre, setOutherFeture] = useState(false);
+  const [createGroup,setCreateGroup] = useState(true)
   const otherFetureRef = useRef()
 
-
+ console.log("anujji")
   const isUserLogin = async () => {
     if (!token) {
       navigate("/login")
+      
     } else {
       setUserData(user)
       const result = await fetchContact(user._id);
@@ -41,7 +45,7 @@ const Home = () => {
   }
 
   window.addEventListener("click",(e) => {
-    if(otherFetureRef.current == e.target.value){
+    if(otherFetureRef.current == e.target){
       return
     }else{
       setOutherFeture(false)
@@ -90,7 +94,7 @@ const Home = () => {
                       onClick={() => setFraindRequest(!fraindRequest)}
                       className='cursor-pointer'><BiCommentAdd /></p>
                     <div  
-                    // onClick={() => setOutherFeture(!otherFeautre)}
+                     onClick={() => setOutherFeture(!otherFeautre)}
                     className='cursor-pointer relative'>
                       <p 
                       ref={otherFetureRef}
@@ -100,7 +104,8 @@ const Home = () => {
                       otherFeautre &&  
                       <div className='w-[210px] flex flex-col gap-2 p-4 bg-slate-400 rounded-md text-base 
                       absolute right-3 top-10 '>
-                      <p className='cursor-pointer hover:bg-slate-500 p-1 rounded-md'>New group</p>
+                      <p onClick={() => setCreateGroup(true)}
+                      className='cursor-pointer hover:bg-slate-500 p-1 rounded-md'>New group</p>
                       <p className='cursor-pointer hover:bg-slate-500 p-1 rounded-md'>New community</p>
                       <p className='cursor-pointer hover:bg-slate-500 p-1 rounded-md'>Starred messages</p>
                       <p className='cursor-pointer hover:bg-slate-500 p-1 rounded-md'>Select chats</p>
@@ -138,7 +143,7 @@ const Home = () => {
                   contact ? <div className='flex flex-col gap-2'>
                     {
                       contact.map((contact) => {
-                        return <div className='flex flex-col gap-2'>
+                        return <div className={`flex flex-col gap-2 ${chat && contact._id == chat._id ? "bg-slate-400" : ""}`}>
                           <Contact userData={contact} />
                         </div>
                       })
@@ -156,6 +161,10 @@ const Home = () => {
 
             {
               fraindRequest && <div> <SendfraindRequest setFraindRequest={setFraindRequest} /></div>
+            }
+            
+            {
+              createGroup && <div> <SelectMember setCreateGroup={setCreateGroup} contact={contact}/></div>
             }
 
           </div>
