@@ -3,9 +3,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setSignupData } from '../slice/user';
 import { useNavigate } from 'react-router-dom';
 import { getOtp } from '../service/operations/auth';
+import { toast } from 'react-toastify';
+import SubmmitButton from '../componetns/common/SubmmitButton';
+import SelectImage from '../componetns/common/SelectImage';
 
 const Signup = () => {
   const [formData,setFormData] = useState();
+  const [step,setStep] = useState(1);
+  const { signupData } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -16,21 +21,38 @@ const Signup = () => {
      }))
     }
 
-    const handleSubmit = async(e) =>{
-      e.preventDefault();
+  const handleSubmit = async(e) =>{
+   e.preventDefault();
   if(formData.password === formData.confirmPassword){
     dispatch(setSignupData(formData))
-    getOtp(formData.email,navigate)
+    setStep(2)
   }else{
     // genarate toast
-    console.log("Password not matching")
+    toast.error("Password not matching")
   }
+  }
+
+  const getImgUrl = (url) => {
+    if(url){
+      const data = {
+      ...signupData,
+      image : url
     }
+    dispatch(setSignupData(data))
+    getOtp(formData.email,navigate);
+    navigate("/verfyEmail")
+    }else {
+      toast.error("Error in Creating user")
+      navigate("/signup")
+    }
+  }
 
 
   return (
     <div className='w-[50%]'>
-    <form>
+    {
+      step == 1 &&
+      <form onSubmit={handleSubmit}>
         {/* name */}
         <label className='w-full border border-black'>
             <p className='text-xl font-semibold'>Name</p>
@@ -83,9 +105,22 @@ const Signup = () => {
             />
         </label>
 
-        <button onClick={handleSubmit}
-        className='py-3 px-2 bg-yellow-400 border border-black rounded-md'>Send Otp</button>
+       <button >
+       <SubmmitButton text={"Next"}/>
+       </button>
     </form>
+}
+
+{/* step 2 select image */}
+<div className='w-screen h-screen flex items-center justify-center border border-black'>
+{
+      step == 2 &&
+      <div className='w-[70%] '>
+        <SelectImage text={"Get Otp"}  getImgUrl={getImgUrl}/>
+      </div>
+    }
+</div>
+    
     </div>
   )
 }

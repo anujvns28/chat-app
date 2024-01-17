@@ -30,9 +30,6 @@ const Chat = ({socket}) => {
         userId : user._id
       }
       const result = await sendMsz(data)
-      if(result){
-        console.log("sending msz ",result)
-      }
       
       const socketData = {
         msz:msz,
@@ -52,7 +49,6 @@ const Chat = ({socket}) => {
       }
       const result = await fetchMsz(data);
       if(result){
-      console.log(result.data.chats,"fetched chats")
       setChats(result.data.chats)
       }
      }else{
@@ -71,7 +67,6 @@ const Chat = ({socket}) => {
     
       if(chats){
         socket.on("msg-recive",(data) => {
-          console.log(data,"msg-recive")
           const messages = [...chats]
           messages.push(data)
           setChats(messages)

@@ -13,7 +13,8 @@ import SendfraindRequest from '../componetns/common/SendfraindRequest';
 import Chat from '../componetns/common/Chat';
 import { toast } from 'react-toastify';
 import io from "socket.io-client"
-import SelectMember from '../componetns/core/group/SelectMember';
+import CreateGroup from '../componetns/core/group/CreateGroup';
+
 
 const socket = io("http://localhost:4000");
 
@@ -26,7 +27,7 @@ const Home = () => {
   const [contact, setContact] = useState();
   const [fraindRequest, setFraindRequest] = useState(false);
   const [otherFeautre, setOutherFeture] = useState(false);
-  const [createGroup,setCreateGroup] = useState(true)
+  const [createGroup,setCreateGroup] = useState(false);
   const otherFetureRef = useRef()
 
  console.log("anujji")
@@ -38,7 +39,6 @@ const Home = () => {
       setUserData(user)
       const result = await fetchContact(user._id);
       if (result) {
-        console.log(result, "printing result")
         setContact(result.data.data)
       }
     }
@@ -164,7 +164,7 @@ const Home = () => {
             }
             
             {
-              createGroup && <div> <SelectMember setCreateGroup={setCreateGroup} contact={contact}/></div>
+              createGroup && <div> <CreateGroup setCreateGroup={setCreateGroup} contact={contact}/></div>
             }
 
           </div>

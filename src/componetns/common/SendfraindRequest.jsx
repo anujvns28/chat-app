@@ -14,7 +14,6 @@ const SendfraindRequest = ({setFraindRequest}) => {
             email : email,
             userId : user._id
         }
-        console.log(data,"data..")
         await sendFraindRequest(data)
     }
   return (

@@ -25,7 +25,6 @@ const Request = () => {
       userId : userId,
       token :  params.token
     }
-    console.log(data)
    const result =  acceptRequest(data)
   }
 

@@ -1,9 +1,12 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-import { createAccount } from '../service/operations/auth';
+import { createAccount } from '../../service/operations/auth';
+import SubmmitButton from './SubmmitButton';
+import { toast } from 'react-toastify';
 
-const SelectImage = () => {
+
+const SelectImage = ({text,getImgUrl}) => {
   const [avatrs, setAvatars] = useState([])
   const [profileFile, setPorfileFile] = useState()
   const [profileImage, setPorfileImg] = useState()
@@ -31,7 +34,6 @@ const SelectImage = () => {
     setPorfileFile(e.target.files[0])
     const img = URL.createObjectURL(e.target.files[0])
     setPorfileImg(img)
-
   }
 
   const handleClick = () => {
@@ -60,17 +62,25 @@ const SelectImage = () => {
     }
   }
 
+  const handlemyfun = () => {
+   if(!profileFile){
+    toast.error("You hanv not select img")
+   }else{
+    getImgUrl(profileFile)
+   }
+  }
+
 
   return (
-    <div className='flex flex-col w-screen h-screen items-center justify-center '>
+    <div className='flex flex-col w-full  items-center justify-center '>
       Select imagges
       {
         avatrs.length === 5 ?
           <div className='flex flex-row gap-3'>
             {
-              avatrs.map((img) => {
+              avatrs.map((img,index) => {
                 let url = img
-                return <div className='w-[100px] h-[100px] rounded-md'>
+                return <div key={index} className='w-[100px] h-[100px] rounded-md'>
                   <img
                     src={url}
                     width={100}
@@ -83,10 +93,7 @@ const SelectImage = () => {
             }
           </div>
           : <div>Loading...</div>
-
       }
-
-
 
       <div>
         <input
@@ -108,9 +115,8 @@ const SelectImage = () => {
         }
       </div>
 
-      <button onClick={handelSubmit} 
-      className='py-3 px-2 bg-yellow-400 border border-black rounded-md'>Create Account</button>
-
+     
+        <SubmmitButton text={text}  handleTask={handlemyfun}/>
     </div>
   )
 }

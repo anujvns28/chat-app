@@ -17,7 +17,6 @@ const Login = () => {
   const handelSubmit = (e) => {
     e.preventDefault();
     loginUser(formData,dispatch)
-    console.log(formData)
   }
   return (
     <div className='felx items-center justify-center flex-col gap-2'>
