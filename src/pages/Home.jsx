@@ -14,6 +14,7 @@ import Chat from '../componetns/common/Chat';
 import { toast } from 'react-toastify';
 import io from "socket.io-client"
 import CreateGroup from '../componetns/core/group/CreateGroup';
+import { fetchGroups } from '../service/operations/group';
 
 
 const socket = io("http://localhost:4000");
@@ -25,9 +26,11 @@ const Home = () => {
   const {chat} = useSelector((state) => state.chat)
   const [userData, setUserData] = useState();
   const [contact, setContact] = useState();
+  const [group,setGroup] = useState();
   const [fraindRequest, setFraindRequest] = useState(false);
   const [otherFeautre, setOutherFeture] = useState(false);
   const [createGroup,setCreateGroup] = useState(false);
+  const [isGroup,setIsGroup] = useState(false)
   const otherFetureRef = useRef()
 
  console.log("anujji")
@@ -38,8 +41,12 @@ const Home = () => {
     } else {
       setUserData(user)
       const result = await fetchContact(user._id);
+      const groupResult = await fetchGroups(user._id);
       if (result) {
         setContact(result.data.data)
+      }
+      if (groupResult) {
+        setGroup(groupResult.data.data)
       }
     }
   }
@@ -135,11 +142,22 @@ const Home = () => {
                   <div className='w-[10%] flex items-center justify-center text-2xl text-black'>
                     <p><IoFilterOutline /></p>
                   </div>
-
                 </div>
               </div>
+
+              <div className='flex w-full items-center justify-between  px-12 py-1 '>
+                  <p onClick={() => setIsGroup(false)}
+                  className={`px-2 py-1 cursor-pointer rounmd border border-black rounded-md ${!isGroup ? "bg-yellow-400" : "" }`}>Contact</p>
+                  <p onClick={() => setIsGroup(true)}
+                  className={`px-2 py-1 cursor-pointer rounmd border border-black rounded-md ${isGroup ? "bg-yellow-400" : "" }`}>Group</p>
+                </div>
+
               <div className='h-full w-full border border-green-500 p-2 flex flex-col gap-2'>
                 {
+                  !isGroup 
+                  ? <div >
+                    {/* contacts */}
+                    {
                   contact ? <div className='flex flex-col gap-2'>
                     {
                       contact.map((contact) => {
@@ -150,6 +168,23 @@ const Home = () => {
                     }
                   </div>
                     : <div>Loading..</div>
+                }
+                  </div>
+                  : <div>
+                {/* group  */}
+                {
+                  group ? <div className='flex flex-col gap-2'>
+                    {
+                      group.map((contact) => {
+                        return <div className={`flex flex-col gap-2 ${chat && contact._id == chat._id ? "bg-slate-400" : ""}`}>
+                          <Contact userData={contact} />
+                        </div>
+                      })
+                    }
+                  </div>
+                    : <div>Loading..</div>
+                }
+                  </div>
                 }
 
               </div>
@@ -164,7 +199,10 @@ const Home = () => {
             }
             
             {
-              createGroup && <div> <CreateGroup setCreateGroup={setCreateGroup} contact={contact}/></div>
+              createGroup && <div> <CreateGroup 
+              setCreateGroup={setCreateGroup} 
+              contact={contact} 
+             /></div>
             }
 
           </div>

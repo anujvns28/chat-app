@@ -4,79 +4,19 @@ import SubmmitButton from '../../common/SubmmitButton';
 import { toast } from 'react-toastify';
 import { MdCheck } from "react-icons/md";
 import SelectImage from '../../common/SelectImage';
+import { useSelector } from 'react-redux';
+import { createGroup } from '../../../service/operations/group';
 
 
 const CreateGroup = ({ setCreateGroup, contact }) => {
   const [members, setMembers] = useState([]);
   const [step,setStep] = useState(1);
-
-  //console.log(contact,"this are contacts")
-  const imgContainer = [
-    {
-      id: 1,
-      name: 'Anuj Yadav',
-      img: "https://api.multiavatar.com/Binx%487ond.svg"
-    },
-    {
-      id: 2,
-      name: 'Arun kurmar',
-      img: "https://api.multiavatar.com/Binx%486ond.svg"
-    }
-    , {
-      id: 3,
-      name: 'Kisan',
-      img: "https://api.multiavatar.com/Binx%587ond.svg"
-    }
-    , {
-      id: 4,
-      name: 'Devil',
-      img: "https://api.multiavatar.com/Binx%437ond.svg"
-    }
-    , {
-      id: 5,
-      name: 'Something',
-      img: "https://api.multiavatar.com/Binx%489ond.svg"
-    },
-    {
-      id: 6,
-      name: 'Sachin',
-      img: "c"
-    },
-    {
-      id: 7,
-      name: 'Anuj Yadav',
-      img: "https://api.multiavatar.com/Binx%487ond.svg"
-    },
-    {
-      id: 8,
-      name: 'Arun kurmar',
-      img: "https://api.multiavatar.com/Binx%486ond.svg"
-    }
-    , {
-      id: 9,
-      name: 'Kisan',
-      img: "https://api.multiavatar.com/Binx%587ond.svg"
-    }
-    , {
-      id: 10,
-      name: 'Devil',
-      img: "https://api.multiavatar.com/Binx%437ond.svg"
-    },
-    {
-      id: 11,
-      name: 'Something',
-      img: "https://api.multiavatar.com/Binx%489ond.svg"
-    },
-    {
-      id: 12,
-      name: 'Sachin',
-      img: "https://api.multiavatar.com/Binx%899.svg"
-    },
-  ]
-
+  const {user} = useSelector((state) => state.user)
+  const [groupInfo,setGroupInfo] = useState();
+  
   const handleMember = (person) => {
     let mem = [...members]
-    const index = mem.findIndex((item) => item.id == person.id)
+    const index = mem.findIndex((item) => item._id == person._id)
     if (index < 0) {
       mem.push(person)
     } else {
@@ -95,7 +35,27 @@ const CreateGroup = ({ setCreateGroup, contact }) => {
   }
 
   const handleProfileImg = (url) => {
-    console.log(url ,"profile url")
+    let memberId = []
+     members.map((item) => memberId.push(item._id));
+     memberId.push(user._id)
+    const data = {
+      userId : user._id,
+      image : url,
+      members : memberId,
+      groupName : groupInfo.groupName,
+      groupDesc : groupInfo.groupDesc
+    }
+    // creating group
+    createGroup(data)
+    setCreateGroup(false)
+
+  }
+
+  const handleChange = (e) => {
+    setGroupInfo((prev) => ({
+      ...prev,
+      [e.target.name] : e.target.value
+    }))
   }
 
 
@@ -103,7 +63,10 @@ const CreateGroup = ({ setCreateGroup, contact }) => {
   return (
     <div className='fixed inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm'>
       <div className='border border-black w-[70%]  bg-slate-200 rounded-md p-4'>
-       {/* seletct group members */}
+       {
+        contact ?
+        <div className='w-full h-full'>
+          {/* seletct group members */}
         {
           step == 1 && 
           <div className='w-full h-full'>
@@ -125,7 +88,7 @@ const CreateGroup = ({ setCreateGroup, contact }) => {
                       return <div key={mem.id} className='relative flex flex-col items-center justify-center  p-2'>
                         <img
                           className='w-[70px]  h-[70px] rounded-full cursor-pointer'
-                          src={mem.img} />
+                          src={mem.image} />
                         <p onClick={() => handleMember(mem)}
                         className='absolute -top-1 -right-1 cursor-pointer text-2xl font-semibold'><RxCross1 /></p>
                         <p>{mem.name}</p>
@@ -138,14 +101,14 @@ const CreateGroup = ({ setCreateGroup, contact }) => {
 
           <div className='flex flex-wrap flex-row gap-3 w-[80%] items-center justify-center '>
             {
-              imgContainer.map((mem) => {
-                return <div key={mem.id} className=' flex flex-col items-center justify-center'>
+              contact.map((mem) => {
+                return <div key={mem._id} className=' flex flex-col items-center justify-center'>
                   <div>
                   {
-                    members.findIndex((item) => item.id == mem.id) < 0
+                    members.findIndex((item) => item._id == mem._id) < 0
                       ? <img onClick={() => handleMember(mem)}
                       className={` w-[70px] h-[70px] rounded-full cursor-pointer`}
-                      src={mem.img}
+                      src={mem.image}
                     />
                       :
                       <div className=' z-50 w-[70px] h-[70px]  text-2xl font-semibold '>
@@ -174,9 +137,37 @@ const CreateGroup = ({ setCreateGroup, contact }) => {
      {
       step == 2 &&
       <div className='w-full h-full'>
+         <label>
+          <p>Group Name</p>
+          <input 
+          required
+          name='groupName'
+          onChange={handleChange}
+          placeholder='Group Name'
+          />
+         </label> 
+         <label>
+          <p>About</p>
+          <input 
+          required
+          name='groupDesc'
+          onChange={handleChange}
+          placeholder='Opetional'
+          />
+         </label>
          <SelectImage text={"Next"} getImgUrl={handleProfileImg}/>
       </div>
      }
+        </div>
+
+
+        : <div className='w-[70vw] h-[70vh] flex flex-col items-center justify-center text-2xl font-semibold'>
+          <p className='text-2xl font-semibold cursor-pointer w-fit'
+            onClick={() => setCreateGroup(false)}><RxCross1 />
+          </p>
+          You Have not Members to create Group
+        </div>
+       }
 
       </div>
     </div>

@@ -21,19 +21,34 @@ const Chat = ({socket}) => {
     const scrollRef = useRef();
 
     setTimeout(() => setTime(false),7000)
-   
+    let groupIds
+    if(chat){
+       if(chat.isGroup){
+        groupIds = [...chat.members]
+        groupIds.push(chat._id)
+       }
+    }
+  
     const handleSubmit = async(e) => {
       e.preventDefault();
       const data = {
         msz:msz,
-        chatId : chat._id,
+        chat : !chat.isGroup ? chat._id : groupIds,
         userId : user._id
       }
       const result = await sendMsz(data)
       
+      // const socketData = {
+      //   msz:msz,
+      //   chatId : chat._id,
+      //   senderId : user._id
+      // }
+      // socket.emit("msz",socketData)
+
+
       const socketData = {
         msz:msz,
-        chatId : chat._id,
+        chatId : chat.isGroup ? [...chat.members] : chat._id,
         senderId : user._id
       }
       socket.emit("msz",socketData)
@@ -43,8 +58,9 @@ const Chat = ({socket}) => {
     
     const fetchChat = async() =>{
      if(chat){
+      
       const data = {
-        chatId : chat._id,
+        chat : !chat.isGroup ? chat._id : groupIds,
         userId : user._id
       }
       const result = await fetchMsz(data);
@@ -91,7 +107,7 @@ const Chat = ({socket}) => {
    setMsz(message)
   },[emoji])
 
-  
+//console.log(chat,"pringitn chat")
   return (
     <div className='w-full h-full'>
      {
@@ -102,11 +118,11 @@ const Chat = ({socket}) => {
          <div className='flex flex-row gap-2'>
          <div>
          <img className='w-[50px] h-[50px] rounded-full'
-         src={chat.image} />
+         src={!chat.isGroup  ? chat.image : chat.groupImg} />
          
          </div>
          <div className='flex flex-col gap-2  justify-center'>
-         <p className=''>{chat.name}</p>
+         <p className=''>{!chat.isGroup  ? chat.name : chat.groupName}</p>
         {time &&  <p className='text-sm font-semibold'>click here for contact view</p>}
          </div>
          
