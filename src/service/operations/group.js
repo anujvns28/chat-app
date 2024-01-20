@@ -26,7 +26,7 @@ export const fetchGroups = async (data) => {
     let result
     try {  
         const response = await apiConnector("POST", FETCH_GROUP_API,{userId:data});
-        console.log("fetching group response", response);
+      //  console.log("fetching group response", response);
         result = response
     }
     catch (error) {

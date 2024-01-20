@@ -69,7 +69,8 @@ const Home = () => {
   useEffect(() =>{
   if(user){
     socket.emit("add-user",{
-      userId : user._id
+      userId : user._id,
+      userName : user.email
     })
 
   }else{

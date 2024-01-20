@@ -76,20 +76,25 @@ const Chat = ({socket}) => {
     setTime(true)
     fetchChat()
     },[chat])
-
-
-
-   useEffect(() => {
     
       if(chats){
+        console.log(chat._id,"this is chat id anujjkjkj")
         socket.on("msg-recive",(data) => {
+          console.log(chat._id,"this is chat id")
+          if(data.chatId === chat._id || data.senderId === chat._id){
+            console.log(data)
+           
           const messages = [...chats]
           messages.push(data)
           setChats(messages)
+          }else{
+            return
+          }
+          
         })
       }
     
-   },[chats])
+   
  
    
    const handleEmoji = (event) => {
@@ -106,6 +111,8 @@ const Chat = ({socket}) => {
    message = message + emoji
    setMsz(message)
   },[emoji])
+
+  
 
 //console.log(chat,"pringitn chat")
   return (

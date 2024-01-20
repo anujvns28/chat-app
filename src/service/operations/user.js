@@ -27,7 +27,7 @@ export const fetchContact = async (data) => {
     let result
     try {
         const response = await apiConnector("POST", FETCH_CONTACT_API,{userId:data});
-        console.log("Fetching contact request response", response);
+       // console.log("Fetching contact request response", response);
         result = response
     }
     catch (error) {
