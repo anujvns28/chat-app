@@ -13,8 +13,10 @@ export const userEndPoints = {
 }
 
 export const chatEndPoints = {
-    SEND_MSZ_API : BASE_URL + "/chat/sendMsz",
-    FETCH_MSZ_API : BASE_URL + '/chat/fetchedChat'
+    SEND_GROUP_MSZ_API : BASE_URL + "/chat/sendGroupMsz",
+    FETCH_GROUP_MSZ_API : BASE_URL + '/chat/fetchGroupChat',
+    SEND_ONE_ONE_MSZ_API : BASE_URL + "/chat/sendOneOneMsz",
+    FETCH_ONE_ONE_MSZ_API : BASE_URL + "/chat/fetchOneOneChats"
 }
 
 export const groupEndPoints = {
