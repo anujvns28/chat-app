@@ -8,6 +8,8 @@ import { fetchGroupMsz, fetchOneToOneMsz, sendGroupMsz, sendOnetoOneMsz } from '
 import EmojiPicker from 'emoji-picker-react';
 import { BsEmojiGrin } from "react-icons/bs";
 import { RxCross1 } from "react-icons/rx";
+import UserInfo from '../core/userInfo/UserInfo';
+import ChatInfo from '../core/userInfo/ChatInfo';
 
 
 const Chat = ({ socket }) => {
@@ -21,6 +23,7 @@ const Chat = ({ socket }) => {
   const scrollRef = useRef();
   const [showMess, setshoMess] = useState(false);
   const [socketMess, setSocketMess] = useState();
+  const [chatInfo, setChatInof] = useState(false);
 
   setTimeout(() => setTime(false), 7000)
 
@@ -32,7 +35,7 @@ const Chat = ({ socket }) => {
     }
   }
 
-// send message
+  // send message
   const handleSubmit = async (e) => {
     e.preventDefault();
     // send msz => group
@@ -49,7 +52,7 @@ const Chat = ({ socket }) => {
     if (!chat.isGroup) {
       const data = {
         msz: msz,
-        chatId:chat._id,
+        chatId: chat._id,
         userId: user._id
       }
       await sendOnetoOneMsz(data)
@@ -82,12 +85,12 @@ const Chat = ({ socket }) => {
         userId: user._id
       }
       // group chat
-      if(chat.isGroup){
+      if (chat.isGroup) {
         const result = await fetchGroupMsz(data);
         if (result) {
           setChats(result.data.chats)
         }
-      }else{
+      } else {
         const result = await fetchOneToOneMsz(data);
         if (result) {
           setChats(result.data.chats)
@@ -153,8 +156,10 @@ const Chat = ({ socket }) => {
       {
         !chat ? <div
           className='h-full w-full flex items-center justify-center text-xl font-semibold'>You Have not Seleced any chat</div>
-          : <div className='w-[100%]  border h-full  border-black flex flex-col gap-1'>
-            <div className='h-[80px] w-full mb-2 bg-slate-200 flex flex-row justify-between p-2'>
+          : <div className='w-full h-full flex '>
+            <div className={`${chatInfo ? "w-[60%]" : "w-full"}  border h-full  border-black flex flex-col gap-1`}>
+            <div onClick={() => setChatInof(true)}
+            className='h-[70px] w-full mb-2 bg-slate-200 flex flex-row justify-between p-2 cursor-pointer'>
               <div className='flex flex-row gap-2'>
                 <div>
                   <img className='w-[50px] h-[50px] rounded-full'
@@ -205,10 +210,10 @@ const Chat = ({ socket }) => {
                   <div className='flex w-full border border-black rounded-md'>
 
                     <div className='flex h-full items-center justify-center text-2xl
-           font-semibold px-3 rounded-l-md bg-white'>
+                      font-semibold px-3 rounded-l-md bg-white'>
                       <p onClick={() => setShowemoji(!showEmoji)}
                         className='cursor-pointer'>{showEmoji ? <RxCross1 /> : <BsEmojiGrin />}</p>
-                    </div>
+                    </div >
 
                     <input
                       required
@@ -231,6 +236,15 @@ const Chat = ({ socket }) => {
 
             </div>
           </div>
+
+          {/* chat info */}
+         {
+           chatInfo && 
+          <div className='w-[40%] h-full'>
+           <ChatInfo setChatInof={setChatInof} />
+          </div>
+         }
+          </div>  
       }
     </div>
   )
