@@ -15,6 +15,7 @@ import ChatInfo from '../core/userInfo/ChatInfo';
 const Chat = ({ socket }) => {
   const { chat } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.user);
+  const [currentChat,setCurrentChat] = useState();
   const [time, setTime] = useState(true);
   const [msz, setMsz] = useState("");
   const [emoji, setEmoji] = useState('');
@@ -34,6 +35,10 @@ const Chat = ({ socket }) => {
       groupMember.push(chat._id)
     }
   }
+  
+  useEffect(() => {
+    setCurrentChat(chat)
+  },[chat])
 
   // send message
   const handleSubmit = async (e) => {
@@ -154,7 +159,7 @@ const Chat = ({ socket }) => {
   return (
     <div className='w-full h-full'>
       {
-        !chat ? <div
+        !currentChat ? <div
           className='h-full w-full flex items-center justify-center text-xl font-semibold'>You Have not Seleced any chat</div>
           : <div className='w-full h-full flex '>
             <div className={`${chatInfo ? "w-[60%]" : "w-full"}  border h-full  border-black flex flex-col gap-1`}>
@@ -163,11 +168,11 @@ const Chat = ({ socket }) => {
               <div className='flex flex-row gap-2'>
                 <div>
                   <img className='w-[50px] h-[50px] rounded-full'
-                    src={!chat.isGroup ? chat.image : chat.groupImg} />
+                    src={!currentChat.isGroup ? currentChat.image : currentChat.groupImg} />
 
                 </div>
                 <div className='flex flex-col gap-2  justify-center'>
-                  <p className=''>{!chat.isGroup ? chat.name : chat.groupName}</p>
+                  <p className=''>{!currentChat.isGroup ? currentChat.name : currentChat.groupName}</p>
                   {time && <p className='text-sm font-semibold'>click here for contact view</p>}
                 </div>
 

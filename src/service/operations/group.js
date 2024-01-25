@@ -2,7 +2,12 @@ import { toast } from "react-toastify";
 import { groupEndPoints } from "../api";
 import { apiConnector } from "../apiConnecter";
 
-const {CREATE_GROUP_API,FETCH_GROUP_API} = groupEndPoints
+const {
+    CREATE_GROUP_API,
+    FETCH_GROUP_API,
+    FETCH_GROUP_INFO_API,
+    FETCH_COMMON_GROUP_API
+} = groupEndPoints
 
 export const createGroup = async (data) => {
     let result
@@ -31,6 +36,34 @@ export const fetchGroups = async (data) => {
     }
     catch (error) {
         console.log("fetching group API ERROR....", error);
+    }
+    return result
+
+}
+
+export const fetchGroupInfo = async (data) => {
+    let result
+    try {  
+        const response = await apiConnector("POST", FETCH_GROUP_INFO_API,{groupId:data});
+      //  console.log("fetching group response", response);
+        result = response
+    }
+    catch (error) {
+        console.log("fetching group information  API ERROR....", error);
+    }
+    return result
+
+}
+
+export const fetchCommonGroup = async (data) => {
+    let result
+    try {  
+        const response = await apiConnector("POST", FETCH_COMMON_GROUP_API,data);
+        console.log("fetching common group response", response);
+        result = response
+    }
+    catch (error) {
+        console.log("fetching common group information  API ERROR....", error);
     }
     return result
 

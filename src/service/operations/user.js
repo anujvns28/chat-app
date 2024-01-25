@@ -5,7 +5,8 @@ import { apiConnector } from "../apiConnecter";
 const {
     ACCEPT_FRAIND_REQUST_API,
     FETCH_CONTACT_API,
-    SEND_FRAIND_REQUST_API
+    SEND_FRAIND_REQUST_API,
+    BLOCK_USER_API
 } = userEndPoints
 
 export const acceptRequest = async (data) => {
@@ -52,4 +53,22 @@ export const sendFraindRequest = async (data) => {
     }
     toast.dismiss(loading);
     return result
+}
+
+// block user
+
+export const blockContact = async (data) => {
+    let result
+    try {  
+        const response = await apiConnector("POST", BLOCK_USER_API,data);
+        console.log("block user response", response);
+        result = response
+        toast.success("User Blocked successfully")
+    }
+    catch (error) {
+        console.log("block user API ERROR....", error);
+        toast.error("Error occured in blocking")
+    }
+    return result
+
 }

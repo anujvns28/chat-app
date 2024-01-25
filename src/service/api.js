@@ -9,7 +9,8 @@ export const authEndPoints = {
 export const userEndPoints = {
     ACCEPT_FRAIND_REQUST_API : BASE_URL + "/user/acceptRequest",
     SEND_FRAIND_REQUST_API : BASE_URL + "/user/sendRequest",
-    FETCH_CONTACT_API : BASE_URL + "/user/fetchContact"
+    FETCH_CONTACT_API : BASE_URL + "/user/fetchContact",
+    BLOCK_USER_API : BASE_URL + "/user/blockUser"
 }
 
 export const chatEndPoints = {
@@ -21,5 +22,7 @@ export const chatEndPoints = {
 
 export const groupEndPoints = {
     CREATE_GROUP_API : BASE_URL + "/group/createGroup",
-    FETCH_GROUP_API : BASE_URL + "/group/fetchGroup"
+    FETCH_GROUP_API : BASE_URL + "/group/fetchGroup",
+    FETCH_GROUP_INFO_API : BASE_URL + "/group/fetchGroupInfo",
+    FETCH_COMMON_GROUP_API : BASE_URL + "/group/commonGroup"
 }
