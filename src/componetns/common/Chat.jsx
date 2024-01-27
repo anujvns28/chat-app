@@ -10,9 +10,10 @@ import { BsEmojiGrin } from "react-icons/bs";
 import { RxCross1 } from "react-icons/rx";
 import UserInfo from '../core/userInfo/UserInfo';
 import ChatInfo from '../core/userInfo/ChatInfo';
+import { fetchUserInformaion } from '../../service/operations/user';
 
 
-const Chat = ({ socket }) => {
+const Chat = ({ socket , isUserLogin} ) => {
   const { chat } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.user);
   const [currentChat,setCurrentChat] = useState();
@@ -25,6 +26,8 @@ const Chat = ({ socket }) => {
   const [showMess, setshoMess] = useState(false);
   const [socketMess, setSocketMess] = useState();
   const [chatInfo, setChatInof] = useState(false);
+  const [userData,setUserData] = useState();
+  const [blockedUser,setBlockedUser] = useState([]);
 
   setTimeout(() => setTime(false), 7000)
 
@@ -35,9 +38,20 @@ const Chat = ({ socket }) => {
       groupMember.push(chat._id)
     }
   }
+
+  const fetchUserData = async() => {
+    const userInformation = await fetchUserInformaion(user._id);
+    if(userInformation){
+      setUserData(userInformation.data.data)
+      let blockUser = [];
+      userInformation.data.data.block.map((user) => blockUser.push(user.user));
+      setBlockedUser(blockUser);
+    }
+  }
   
   useEffect(() => {
     setCurrentChat(chat)
+    fetchUserData();
   },[chat])
 
   // send message
@@ -155,9 +169,10 @@ const Chat = ({ socket }) => {
     setMsz(message)
   }, [emoji])
 
-
+  
   return (
     <div className='w-full h-full'>
+      
       {
         !currentChat ? <div
           className='h-full w-full flex items-center justify-center text-xl font-semibold'>You Have not Seleced any chat</div>
@@ -197,7 +212,7 @@ const Chat = ({ socket }) => {
                           return <div ref={scrollRef}
                             className={`scrollbar-h-* scrollbar  scrollbar-track-gray-100 text-black px-10 w-full flex ${item.senderId == user._id ? "justify-end" : "justify-start"}`}>
                             <p className={`${item.senderId === user._id ? "bg-green-500 w-fit text-black" : "bg-slate-500 w-fit items-center flex"}
-                     p-2 rounded-md max-w-[40%]`}>
+                              p-2 rounded-md max-w-[40%]`}>
                               {item.msz}
                             </p>
 
@@ -209,7 +224,10 @@ const Chat = ({ socket }) => {
               </div>
 
               {/* inputs */}
-              <div className='h-[60px]  w-full  bg-slate-200 flex flex-row justify-between p-2'>
+              {
+                !chat.isGroup ?                
+                 !blockedUser.includes(chat._id) ?
+                 <div className='h-[60px]  w-full  bg-slate-200 flex flex-row justify-between p-2'>
                 <form onSubmit={handleSubmit}
                   className='w-full flex flex-row gap-2 relative'>
                   <div className='flex w-full border border-black rounded-md'>
@@ -238,6 +256,40 @@ const Chat = ({ socket }) => {
                   </div>
                 </form>
               </div>
+              : <div className='h-[60px]  w-full  bg-slate-200 flex flex-row justify-center items-center p-2'>
+               <p>You can not send message to block contact</p>
+              </div>
+
+              : <div className='h-[60px]  w-full  bg-slate-200 flex flex-row justify-between p-2'>
+              <form onSubmit={handleSubmit}
+                className='w-full flex flex-row gap-2 relative'>
+                <div className='flex w-full border border-black rounded-md'>
+
+                  <div className='flex h-full items-center justify-center text-2xl
+                    font-semibold px-3 rounded-l-md bg-white'>
+                    <p onClick={() => setShowemoji(!showEmoji)}
+                      className='cursor-pointer'>{showEmoji ? <RxCross1 /> : <BsEmojiGrin />}</p>
+                  </div >
+
+                  <input
+                    required
+                    placeholder='Type a message'
+                    onChange={(e) => setMsz(e.target.value)}
+                    value={msz}
+                    className='w-full  outline-none p-2 rounded-r-md text-xl  placeholder'
+                  />
+                </div>
+                <button>
+                  <SubmmitButton text={"Send"} />
+                </button>
+
+                <div
+                  className={`${showEmoji ? "visible " : "invisible"} absolute -top-[480px] left-6`}>
+                  <EmojiPicker onEmojiClick={handleEmoji} />
+                </div>
+              </form>
+            </div>
+              }
 
             </div>
           </div>
@@ -246,7 +298,13 @@ const Chat = ({ socket }) => {
          {
            chatInfo && 
           <div className='w-[40%] h-full'>
-           <ChatInfo setChatInof={setChatInof} />
+           <ChatInfo 
+           setChatInof={setChatInof} 
+           userData={userData} 
+           fetchUserData={fetchUserData}
+           setCurrentChat={setCurrentChat}
+           isUserLogin={isUserLogin}
+           />
           </div>
          }
           </div>  

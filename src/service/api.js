@@ -10,7 +10,12 @@ export const userEndPoints = {
     ACCEPT_FRAIND_REQUST_API : BASE_URL + "/user/acceptRequest",
     SEND_FRAIND_REQUST_API : BASE_URL + "/user/sendRequest",
     FETCH_CONTACT_API : BASE_URL + "/user/fetchContact",
-    BLOCK_USER_API : BASE_URL + "/user/blockUser"
+    BLOCK_USER_API : BASE_URL + "/user/blockUser",
+    UNBLOCK_USER_API : BASE_URL + "/user/unBlockUser",
+    GET_USERDATA_API : BASE_URL + "/user/getUser",
+    DELETE_USER_API : BASE_URL + "/user/deleteUser",
+    ADD_USER_IN_CONTACT_API : BASE_URL + "/user/addUserinContact",
+    GET_ALL_USERS_API : BASE_URL + "/user/getAllUsers"
 }
 
 export const chatEndPoints = {

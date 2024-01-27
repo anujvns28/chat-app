@@ -59,7 +59,7 @@ export const fetchCommonGroup = async (data) => {
     let result
     try {  
         const response = await apiConnector("POST", FETCH_COMMON_GROUP_API,data);
-        console.log("fetching common group response", response);
+        //console.log("fetching common group response", response);
         result = response
     }
     catch (error) {

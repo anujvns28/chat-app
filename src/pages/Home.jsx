@@ -8,7 +8,7 @@ import { BsChatLeftDots } from "react-icons/bs";
 import { IoFilterOutline } from "react-icons/io5";
 import { IoIosSearch } from "react-icons/io";
 import Contact from '../componetns/common/Contact';
-import { fetchContact } from '../service/operations/user';
+import { fetchContact, fetchUserInformaion } from '../service/operations/user';
 import SendfraindRequest from '../componetns/common/SendfraindRequest';
 import Chat from '../componetns/common/Chat';
 import { toast } from 'react-toastify';
@@ -16,6 +16,7 @@ import io from "socket.io-client"
 import CreateGroup from '../componetns/core/group/CreateGroup';
 import { fetchGroups } from '../service/operations/group';
 import UserInfo from '../componetns/core/userInfo/UserInfo';
+import AllUsers from '../componetns/common/AllUsers';
 
 
 const socket = io("http://localhost:4000");
@@ -33,6 +34,7 @@ const Home = () => {
   const [createGroup, setCreateGroup] = useState(false);
   const [isGroup, setIsGroup] = useState(false);
   const [userInfo, setUserInof] = useState(false);
+  const [allUser,setAllUser] = useState(false);
   const otherFetureRef = useRef();
 
   console.log("anujji")
@@ -41,15 +43,19 @@ const Home = () => {
       navigate("/login")
 
     } else {
-      setUserData(user)
       const result = await fetchContact(user._id);
       const groupResult = await fetchGroups(user._id);
+      const userInformation = await fetchUserInformaion(user._id);
+      if(userInformation){
+        setUserData(userInformation.data.data)
+      }
       if (result) {
         setContact(result.data.data)
       }
       if (groupResult) {
         setGroup(groupResult.data.data)
       }
+
     }
   }
 
@@ -80,7 +86,7 @@ const Home = () => {
     }
   }, [user])
 
-
+ 
 
   return (
     <div>
@@ -118,6 +124,8 @@ const Home = () => {
                       absolute right-3 top-10 '>
                               <p onClick={() => setCreateGroup(true)}
                                 className='cursor-pointer hover:bg-slate-500 p-1 rounded-md'>New group</p>
+                              <p onClick={() => setAllUser(true)}
+                              className='cursor-pointer hover:bg-slate-500 p-1 rounded-md'>All users</p>
                               <p className='cursor-pointer hover:bg-slate-500 p-1 rounded-md'>Settings</p>
                               <p className='cursor-pointer hover:bg-slate-500 p-1 rounded-md'>Log out</p>
                             </div>
@@ -198,11 +206,15 @@ const Home = () => {
             }
 
             <div className='w-[70%]'>
-              <Chat socket={socket} />
+              <Chat socket={socket} userData={userData} isUserLogin={isUserLogin} />
             </div>
 
             {
               fraindRequest && <div> <SendfraindRequest setFraindRequest={setFraindRequest} /></div>
+            }
+            {/* all user */}
+            {
+             allUser && <div> <AllUsers setAllUser={setAllUser} isUserLogin={isUserLogin}/></div>
             }
 
             {
