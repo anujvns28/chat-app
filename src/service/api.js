@@ -29,5 +29,6 @@ export const groupEndPoints = {
     CREATE_GROUP_API : BASE_URL + "/group/createGroup",
     FETCH_GROUP_API : BASE_URL + "/group/fetchGroup",
     FETCH_GROUP_INFO_API : BASE_URL + "/group/fetchGroupInfo",
-    FETCH_COMMON_GROUP_API : BASE_URL + "/group/commonGroup"
+    FETCH_COMMON_GROUP_API : BASE_URL + "/group/commonGroup",
+    EXIST_GROUP_API : BASE_URL + "/group/existGroup"
 }

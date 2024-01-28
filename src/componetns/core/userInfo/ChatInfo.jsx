@@ -4,11 +4,14 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import { RxExit } from "react-icons/rx";
 import { MdBlock } from "react-icons/md";
-import { fetchCommonGroup, fetchGroupInfo } from '../../../service/operations/group';
+import { existFromGroup, fetchCommonGroup, fetchGroupInfo } from '../../../service/operations/group';
 import ChatUserInfo from './ChatUserInfo';
 import { setCurrentChat } from '../../../slice/currentChat';
 import { blockContact, deletContact, unblockContact } from '../../../service/operations/user';
 import Modal from '../../common/Modal';
+import { MdPersonAdd } from "react-icons/md";
+import SelectUser from '../group/SelectUser';
+
 
 const ChatInfo = ({ 
     setChatInof,
@@ -24,7 +27,8 @@ const ChatInfo = ({
     const [commonGroup, setCommonGroup] = useState();
     const [modalData, setModalData] = useState();
     const [isYouBlocked,setIsYouBlocked] = useState(false);
-    const [isBlockedByYou,setIsBlockedByYou] = useState(false)
+    const [isBlockedByYou,setIsBlockedByYou] = useState(false);
+    const [selectUser,setSelectUser] = useState(false);
     const dispatch = useDispatch();
 
 
@@ -71,6 +75,27 @@ const ChatInfo = ({
         setCurrentChat(null)
         isUserLogin();
         fetchUserData();
+    }
+
+    // exist group
+    const handleExistGroup = async() => {
+        await existFromGroup({userId:user._id,groupId:chat._id});
+        setCurrentChat(null);
+        isUserLogin();
+        fetchUserData();
+    }
+
+    // exist groupp modal
+    const handleExistGroupModal = () => {
+        const modal = {
+            text1: "After existing you can not send or recive message",
+            text2: chat.groupName,
+            btn1: "Cancel",
+            btn2: "Exist",
+            handler1: () => setModalData(null),
+            handler2: () =>handleExistGroup()
+        }
+        setModalData(modal);
     }
 
     const handleDeletModal = () => {
@@ -202,6 +227,12 @@ const ChatInfo = ({
                         {
                             chat.isGroup &&
                             <div className='w-full border border-black p-3 mt-3'>
+
+                                <div onClick={() => setSelectUser(true)}
+                                className='flex flex-row gap-3  items-center py-3 cursor-pointer px-5 hover:bg-slate-500'>
+                                   <p className='text-xl rounded-full p-2 text-white bg-green-500'><MdPersonAdd/></p>
+                                   <p className='text-white'>Add Member</p>
+                                </div>
                                 {
                                     groupInfo &&
                                     groupInfo.data.members.map((member) => {
@@ -231,7 +262,8 @@ const ChatInfo = ({
                         <div className='w-full mt-2  border border-black '>
                             {
                                 chat.isGroup ?
-                                    <div className='cursor-pointer flex items-center justify-start  flex-row gap-4  hover:bg-slate-300 text-red-500 py-3 px-5'>
+                                    <div onClick={handleExistGroupModal}
+                                    className='cursor-pointer flex items-center justify-start  flex-row gap-4  hover:bg-slate-300 text-red-500 py-3 px-5'>
                                         <p className='text-xl font-semibold '>{<RxExit />}</p>
                                         <p className='text-lg'>Exit Group</p>
                                     </div>
@@ -266,11 +298,13 @@ const ChatInfo = ({
                                     </div>
 
                             }
-                            <div onClick={handleDeletModal}
-                            className='cursor-pointer flex items-center justify-start  flex-row gap-4  hover:bg-slate-300 text-red-500 py-3 px-5'>
-                                <p className='text-xl font-semibold '><MdDelete /></p>
-                                <p className='text-lg'>{chat.isGroup ? "Group" : chat.name}</p>
-                            </div>
+                            {
+                             !chat.isGroup &&   <div onClick={handleDeletModal}
+                                className='cursor-pointer flex items-center justify-start  flex-row gap-4  hover:bg-slate-300 text-red-500 py-3 px-5'>
+                                    <p className='text-xl font-semibold '><MdDelete /></p>
+                                    <p className='text-lg'> {chat.name}</p>
+                                </div>
+                            }
                         </div>
                     </div>
             }
@@ -280,6 +314,9 @@ const ChatInfo = ({
             }
             {
                 modalData && <Modal modalData={modalData} />
+            }
+            {
+                selectUser && <SelectUser setSelectUser={setSelectUser} groupInfo={groupInfo.data.members}/>
             }
         </div>
     )

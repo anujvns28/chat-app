@@ -6,7 +6,8 @@ const {
     CREATE_GROUP_API,
     FETCH_GROUP_API,
     FETCH_GROUP_INFO_API,
-    FETCH_COMMON_GROUP_API
+    FETCH_COMMON_GROUP_API,
+    EXIST_GROUP_API
 } = groupEndPoints
 
 export const createGroup = async (data) => {
@@ -64,6 +65,23 @@ export const fetchCommonGroup = async (data) => {
     }
     catch (error) {
         console.log("fetching common group information  API ERROR....", error);
+    }
+    return result
+
+}
+
+// exist group
+export const existFromGroup = async (data) => {
+    let result
+    try {  
+        const response = await apiConnector("POST", EXIST_GROUP_API,data);
+        console.log("exist user response", response);
+        result = response
+        toast.success("you successfully exist from Group")
+    }
+    catch (error) {
+        console.log("exist user API ERROR....", error);
+        toast.error("Error occured in existing")
     }
     return result
 
