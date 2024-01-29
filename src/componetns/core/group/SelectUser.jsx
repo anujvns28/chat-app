@@ -4,8 +4,11 @@ import { useSelector } from 'react-redux';
 import { RxCross1 } from 'react-icons/rx';
 import { ImCheckboxUnchecked } from "react-icons/im";
 import { ImCheckboxChecked } from "react-icons/im";
+import {SubmmitButton} from "../../common/SubmmitButton"
+import { addUsersInGroup } from '../../../service/operations/group';
+import { toast } from 'react-toastify';
 
-const SelectUser = ({setSelectUser,groupInfo}) => {
+const SelectUser = ({setSelectUser,groupInfo,fetchUserData}) => {
     const [allContact, setAllContact] = useState();
     const [selectedUser,setSelectedUser] = useState([]);
     const members = [];
@@ -32,7 +35,19 @@ const SelectUser = ({setSelectUser,groupInfo}) => {
         setSelectedUser(mem)
       }
 
-      groupInfo.map((user) => members.push(user._id))
+      groupInfo.members.map((user) => members.push(user._id))
+
+      const handleAddUser = async() => {
+        if(selectedUser.length <=  0){
+            toast.error("you not select any usr")
+            return
+        }else{
+            await addUsersInGroup({userId:user._id,groupId:groupInfo._id,members:selectedUser})
+            setSelectUser(false)
+            fetchUserData()
+        }
+       
+      }
 
     useEffect(() => {
         fetchingAllUser();
@@ -98,6 +113,8 @@ const SelectUser = ({setSelectUser,groupInfo}) => {
                            </div>
                         </div>
                 }
+               <button onClick={handleAddUser}
+               className='px-3 py-2 rounded-md bg-yellow-500'>Add</button>
             </div>
         </div>
   )

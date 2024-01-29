@@ -11,9 +11,10 @@ import { blockContact, deletContact, unblockContact } from '../../../service/ope
 import Modal from '../../common/Modal';
 import { MdPersonAdd } from "react-icons/md";
 import SelectUser from '../group/SelectUser';
+import GroupMembers from '../group/GroupMembers';
 
 
-const ChatInfo = ({ 
+const ChatInfo = ({
     setChatInof,
     userData,
     fetchUserData,
@@ -26,9 +27,9 @@ const ChatInfo = ({
     const [userInfo, setUserInof] = useState();
     const [commonGroup, setCommonGroup] = useState();
     const [modalData, setModalData] = useState();
-    const [isYouBlocked,setIsYouBlocked] = useState(false);
-    const [isBlockedByYou,setIsBlockedByYou] = useState(false);
-    const [selectUser,setSelectUser] = useState(false);
+    const [isYouBlocked, setIsYouBlocked] = useState(false);
+    const [isBlockedByYou, setIsBlockedByYou] = useState(false);
+    const [selectUser, setSelectUser] = useState(false);
     const dispatch = useDispatch();
 
 
@@ -64,22 +65,19 @@ const ChatInfo = ({
             }
         }
     }
-    // opeing user info conainer
-    const handleClick = (data) => {
-        setUserInof(data);
-    }
     
+
     // deleting user
-    const handleDeleteUser = async() => {
-        await deletContact({userId:user._id,chatId:chat._id});
+    const handleDeleteUser = async () => {
+        await deletContact({ userId: user._id, chatId: chat._id });
         setCurrentChat(null)
         isUserLogin();
         fetchUserData();
     }
 
     // exist group
-    const handleExistGroup = async() => {
-        await existFromGroup({userId:user._id,groupId:chat._id});
+    const handleExistGroup = async () => {
+        await existFromGroup({ userId: user._id, groupId: chat._id });
         setCurrentChat(null);
         isUserLogin();
         fetchUserData();
@@ -93,7 +91,7 @@ const ChatInfo = ({
             btn1: "Cancel",
             btn2: "Exist",
             handler1: () => setModalData(null),
-            handler2: () =>handleExistGroup()
+            handler2: () => handleExistGroup()
         }
         setModalData(modal);
     }
@@ -109,7 +107,7 @@ const ChatInfo = ({
         }
         setModalData(modal);
     }
-    
+
 
     useEffect(() => {
         if (chat.isGroup) {
@@ -167,7 +165,7 @@ const ChatInfo = ({
 
     useEffect(() => {
         checkBlockStatus()
-    },[])
+    }, [])
 
     return (
         <div className='w-full h-full border border-black flex items-center justify-center transition-all '>
@@ -229,33 +227,25 @@ const ChatInfo = ({
                             <div className='w-full border border-black p-3 mt-3'>
 
                                 <div onClick={() => setSelectUser(true)}
-                                className='flex flex-row gap-3  items-center py-3 cursor-pointer px-5 hover:bg-slate-500'>
-                                   <p className='text-xl rounded-full p-2 text-white bg-green-500'><MdPersonAdd/></p>
-                                   <p className='text-white'>Add Member</p>
+                                    className='flex flex-row gap-3  items-center py-3 cursor-pointer px-5 hover:bg-slate-500'>
+                                    <p className='text-xl rounded-full p-2 text-white bg-green-500'><MdPersonAdd /></p>
+                                    <p className='text-white'>Add Member</p>
                                 </div>
                                 {
                                     groupInfo &&
                                     groupInfo.data.members.map((member) => {
-                                        return <div onClick={() => handleClick(member)}
-                                            className='flex flex-row items-center justify-between py-2 cursor-pointer px-5 hover:bg-slate-500'>
-                                            <div className='flex flex-row gap-3 items-center justify-start '>
-                                                <img
-                                                    src={member.image}
-                                                    className='w-[50px] h-[50px] rounded-full'
-                                                />
-                                                <p>{member.name}</p>
-                                            </div>
-
-                                            {
-                                                chat.admin.includes(member._id) &&
-                                                <div className='border border-black rounded-md p-1 text-xs text-white'>
-                                                    Group Admin
-                                                </div>
-                                            }
-
+                                        return <div>
+                                            <GroupMembers 
+                                             member={member} 
+                                             chat={chat} 
+                                             setUserInof={setUserInof} 
+                                             fetchUserData={fetchUserData}
+                                             
+                                             />
                                         </div>
                                     })
                                 }
+
                             </div>
                         }
 
@@ -263,44 +253,44 @@ const ChatInfo = ({
                             {
                                 chat.isGroup ?
                                     <div onClick={handleExistGroupModal}
-                                    className='cursor-pointer flex items-center justify-start  flex-row gap-4  hover:bg-slate-300 text-red-500 py-3 px-5'>
+                                        className='cursor-pointer flex items-center justify-start  flex-row gap-4  hover:bg-slate-300 text-red-500 py-3 px-5'>
                                         <p className='text-xl font-semibold '>{<RxExit />}</p>
                                         <p className='text-lg'>Exit Group</p>
                                     </div>
 
                                     : <div>
                                         {
-                                            isYouBlocked && 
+                                            isYouBlocked &&
                                             <div onClick={handleUnBlockModal}
-                                            className='cursor-pointer flex items-center justify-start  flex-row gap-4  bg-green-400 hover:bg-green-500 text-red-500 py-3 px-5'>
-                                            <p className='text-xl font-semibold '>{<MdBlock />}</p>
-                                            <p className='text-lg'>UnBlock {chat.name}</p>
+                                                className='cursor-pointer flex items-center justify-start  flex-row gap-4  bg-green-400 hover:bg-green-500 text-red-500 py-3 px-5'>
+                                                <p className='text-xl font-semibold '>{<MdBlock />}</p>
+                                                <p className='text-lg'>UnBlock {chat.name}</p>
                                             </div>
                                         }
 
                                         {
                                             isBlockedByYou &&
-                                            <div 
-                                            className=' flex items-center justify-start  flex-row gap-4 hover:bg-slate-300 text-red-500 py-3 px-5'>
-                                            <p className='text-xl font-semibold '>{<MdBlock />}</p>
-                                            <p className='text-lg'>You are blocked by user</p>
+                                            <div
+                                                className=' flex items-center justify-start  flex-row gap-4 hover:bg-slate-300 text-red-500 py-3 px-5'>
+                                                <p className='text-xl font-semibold '>{<MdBlock />}</p>
+                                                <p className='text-lg'>You are blocked by user</p>
                                             </div>
                                         }
 
                                         {
                                             !isBlockedByYou && !isYouBlocked &&
                                             <div onClick={handleBlockModal}
-                                            className='cursor-pointer flex items-center justify-start  flex-row gap-4 hover:bg-slate-300 text-red-500 py-3 px-5'>
-                                            <p className='text-xl font-semibold '>{<MdBlock />}</p>
-                                            <p className='text-lg'>Block {chat.name}</p>
-                                        </div>
+                                                className='cursor-pointer flex items-center justify-start  flex-row gap-4 hover:bg-slate-300 text-red-500 py-3 px-5'>
+                                                <p className='text-xl font-semibold '>{<MdBlock />}</p>
+                                                <p className='text-lg'>Block {chat.name}</p>
+                                            </div>
                                         }
                                     </div>
 
                             }
                             {
-                             !chat.isGroup &&   <div onClick={handleDeletModal}
-                                className='cursor-pointer flex items-center justify-start  flex-row gap-4  hover:bg-slate-300 text-red-500 py-3 px-5'>
+                                !chat.isGroup && <div onClick={handleDeletModal}
+                                    className='cursor-pointer flex items-center justify-start  flex-row gap-4  hover:bg-slate-300 text-red-500 py-3 px-5'>
                                     <p className='text-xl font-semibold '><MdDelete /></p>
                                     <p className='text-lg'> {chat.name}</p>
                                 </div>
@@ -316,7 +306,7 @@ const ChatInfo = ({
                 modalData && <Modal modalData={modalData} />
             }
             {
-                selectUser && <SelectUser setSelectUser={setSelectUser} groupInfo={groupInfo.data.members}/>
+                selectUser && <SelectUser setSelectUser={setSelectUser} groupInfo={groupInfo.data} fetchUserData={fetchUserData} />
             }
         </div>
     )
