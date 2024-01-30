@@ -33,5 +33,8 @@ export const groupEndPoints = {
     EXIST_GROUP_API : BASE_URL + "/group/existGroup",
     ADD_USER_IN_GROUP_API : BASE_URL + "/group/addUserInGroup",
     MAKE_GROUP_ADMIN_API : BASE_URL + "/group/makeroupAdmin",
-    DISSMISS_GROUP_ADMIN_API : BASE_URL + "/group/dismissGroupAdmin"
+    DISSMISS_GROUP_ADMIN_API : BASE_URL + "/group/dismissGroupAdmin",
+    CHANGE_GROUP_IMG_API : BASE_URL + "/group/changeGroupImg",
+    CHANGE_GROUP_NAME_API : BASE_URL + "/group/changeGroupName",
+    CHANGE_GROUP_DESC_API : BASE_URL + "/group/changeGroupDesc",
 }

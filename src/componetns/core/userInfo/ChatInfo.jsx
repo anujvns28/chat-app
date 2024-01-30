@@ -12,6 +12,8 @@ import Modal from '../../common/Modal';
 import { MdPersonAdd } from "react-icons/md";
 import SelectUser from '../group/SelectUser';
 import GroupMembers from '../group/GroupMembers';
+import { MdEdit } from "react-icons/md";
+import EditGroupInfo from '../group/EditGroupInfo';
 
 
 const ChatInfo = ({
@@ -30,6 +32,8 @@ const ChatInfo = ({
     const [isYouBlocked, setIsYouBlocked] = useState(false);
     const [isBlockedByYou, setIsBlockedByYou] = useState(false);
     const [selectUser, setSelectUser] = useState(false);
+    const [editGroupInfo,setEditGroupInfo] = useState(false);
+
     const dispatch = useDispatch();
 
 
@@ -47,7 +51,9 @@ const ChatInfo = ({
     }
 
     const fetchGroupInformation = async () => {
+        console.log("Calling....")
         const result = await fetchGroupInfo(chat._id);
+        console.log(result,"this is group information")
         if (result) {
             setGroupInfo(result.data)
         }
@@ -163,9 +169,24 @@ const ChatInfo = ({
         setModalData(modal);
     }
 
+    //edit group info
+    const handleEditGroupInfo = (text,type,placeHolder,inputName) => {
+      const  data = {
+            text : text,
+            inputType: type,
+            placeHolder:placeHolder,
+            inputName : inputName
+        }
+
+        setEditGroupInfo(data);
+    }
+
     useEffect(() => {
         checkBlockStatus()
-    }, [])
+    }, []);
+
+    
+
 
     return (
         <div className='w-full h-full border border-black flex items-center justify-center transition-all '>
@@ -187,13 +208,32 @@ const ChatInfo = ({
                                 src={chat.isGroup ? chat.groupImg : chat.image}
                                 className='w-[200px] h-[200px] rounded-full'
                             />
-                            <p className='text-2xl font-semibold text-white'>{chat.isGroup ? chat.groupName : chat.name}</p>
+                             <div className='flex flex-row gap-3 items-center'>
+                             <p className='text-2xl font-semibold text-white'>{chat.isGroup ? chat.groupName : chat.name}</p>
+                             <p onClick={() => handleEditGroupInfo(
+                                "Edit Group Name",
+                                "text"
+                                ,"Enter Group Name",
+                                "groupName"
+                                )}
+                             className='text-2xl font-semibold text-white cursor-pointer'><MdEdit/></p>
+                             </div>
                             <p className='text-xl text-white'>{chat.isGroup ? `Group : ${chat.members.length}` : chat.email}</p>
                         </div>
 
                         <div className='w-full mt-2  p-6 border border-black'>
                             <p className='text-green-300'>About</p>
-                            <p className='text-xl text-white'>{!chat.isGroup ? chat.about ? chat.groupDesc : "You are not set About !!" : " Group adim set About !!"}</p>
+                            <div className='flex flex-row gap-3 items-center justify-between'>
+                            <p className='text-xl text-white'>{!chat.isGroup ? chat.about ?  chat.about : "You are not set About !!"  : chat.isGroup ? chat.isGroup :  " Group adim set About !!"}</p>
+                             <p onClick={() => handleEditGroupInfo(
+                                "Edit Group Disprection",
+                                "text",
+                                "Enter Group Description",
+                                "groupDes"
+                                )}
+                             className='text-2xl font-semibold text-white cursor-pointer'><MdEdit/></p>
+                             </div>
+                            
                         </div>
                         {/* common group */}
                         {
@@ -240,7 +280,7 @@ const ChatInfo = ({
                                              chat={chat} 
                                              setUserInof={setUserInof} 
                                              fetchUserData={fetchUserData}
-                                             
+                                             groupInfo={groupInfo}
                                              />
                                         </div>
                                     })
@@ -307,6 +347,16 @@ const ChatInfo = ({
             }
             {
                 selectUser && <SelectUser setSelectUser={setSelectUser} groupInfo={groupInfo.data} fetchUserData={fetchUserData} />
+            }
+            {
+            editGroupInfo && 
+            <EditGroupInfo 
+            editGroupInfo={editGroupInfo} 
+            setEditGroupInfo={setEditGroupInfo} 
+            groupId={chat._id} 
+            isUserLogin={isUserLogin}
+            
+            />
             }
         </div>
     )

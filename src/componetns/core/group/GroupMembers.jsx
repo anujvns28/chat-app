@@ -1,13 +1,24 @@
-import React, { useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import { dismissUserGroupAdmin, existFromGroup, makeUserGroupAdmin } from '../../../service/operations/group';
 
 
-const GroupMembers = ({ member, chat, setUserInof, fetchUserData ,fetchGroupInformation}) => {
+
+const GroupMembers = ({ member, groupInfo, setUserInof, fetchUserData ,fetchGroupInformation}) => {
     const { user } = useSelector((state) => state.user);
     const [openModal,setOpenModal] = useState(false);
+    const [admin,setAdmin] = useState();
     const modalRef = useRef();
+    const adminArray = []
+
+    const handleAdmin = () => {
+        console.log("calling...")
+        groupInfo.data.admin.map((mem) => {
+        adminArray.push(mem._id)
+        })
+        setAdmin(adminArray)
+    }
 
     // opeing user info conainer
     const handleClick = (data) => {
@@ -15,18 +26,17 @@ const GroupMembers = ({ member, chat, setUserInof, fetchUserData ,fetchGroupInfo
     }
 
     const handleRemoveUser = async(userId) => { 
-        await existFromGroup({userId:userId,groupId:chat._id});
+        await existFromGroup({userId:userId,groupId:groupInfo.data._id});
         fetchUserData();
     }
 
     const handleMakeAdmin = async(userId) => {
-        await makeUserGroupAdmin({userId:userId,groupId:chat._id});
-        fetchGroupInformation();
-
+        await makeUserGroupAdmin({userId:userId,groupId:groupInfo.data._id});
+        fetchUserData();
     }
 
     const handleDismissAdmin = async(userId) => {
-        await dismissUserGroupAdmin({userId:userId,groupId:chat._id});
+        await dismissUserGroupAdmin({userId:userId,groupId:groupInfo.data._id});
         fetchUserData();
     }
 
@@ -38,8 +48,17 @@ const GroupMembers = ({ member, chat, setUserInof, fetchUserData ,fetchGroupInfo
         }
     })
 
+    useEffect(() => {
+        handleAdmin();
+    },[groupInfo])
+
+    
+
     return (
-        <div className='flex relative flex-row items-center justify-between py-2 cursor-pointer px-5 hover:bg-slate-500'>
+       <div>
+        {
+            admin &&
+            <div className='flex relative flex-row items-center justify-between py-2 cursor-pointer px-5 hover:bg-slate-500'>
             <div onClick={() => handleClick(member)}
             className='flex flex-row gap-3 items-center justify-start '>
                 <img
@@ -50,15 +69,15 @@ const GroupMembers = ({ member, chat, setUserInof, fetchUserData ,fetchGroupInfo
             </div>
 
             {
-                chat.admin.includes(member._id) &&
+                admin.includes(member._id) &&
                 <div className='border border-black rounded-md p-1 text-xs text-white'>
                     Group Admin
                 </div>
             }
 
             {
-                chat.admin.includes(user._id) &&
-                <p className='relative'
+                admin.includes(user._id) && 
+                <p className={`relative ${user._id === member._id ? "invisible" : "visible"}`}
                 onClick={ () => setOpenModal(true)} ref={modalRef}>
                     <PiDotsThreeOutlineVerticalFill pointerEvents="none"/>
                 </p>
@@ -70,7 +89,7 @@ const GroupMembers = ({ member, chat, setUserInof, fetchUserData ,fetchGroupInfo
                 <div onClick={ () => handleRemoveUser(member._id)}
                 className='p-2 rounded-md flex items-center hover:bg-slate-500'>Remove</div>
                 {
-                    chat.admin.includes(member._id) 
+                    admin.includes(member._id) 
                     ? <div onClick={() => handleDismissAdmin(member._id)}
                     className='p-2 rounded-md flex items-center hover:bg-slate-500'>Dismiss as Admin</div>
                     : <div onClick={() => handleMakeAdmin(member._id)}
@@ -81,6 +100,8 @@ const GroupMembers = ({ member, chat, setUserInof, fetchUserData ,fetchGroupInfo
             }
 
         </div>
+        }
+       </div>
     )
 }
 

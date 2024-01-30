@@ -10,7 +10,10 @@ const {
     EXIST_GROUP_API,
     ADD_USER_IN_GROUP_API,
     MAKE_GROUP_ADMIN_API,
-    DISSMISS_GROUP_ADMIN_API
+    DISSMISS_GROUP_ADMIN_API,
+    CHANGE_GROUP_DESC_API,
+    CHANGE_GROUP_IMG_API,
+    CHANGE_GROUP_NAME_API
 } = groupEndPoints
 
 export const createGroup = async (data) => {
@@ -139,4 +142,56 @@ export const dismissUserGroupAdmin = async (data) => {
     }
     return result
 
+}
+
+export const changeGroupImg = async (data) => {
+    let result
+    try {  
+        const response = await apiConnector(
+            "POST",
+            CHANGE_GROUP_IMG_API,
+            data,
+            {
+                "Content-Type": "multipart/form-data",
+            }
+            );
+        console.log(" Change group img response", response);
+        result = response
+        toast.success("Group img Change Successfully")
+    }
+    catch (error) {
+        console.log("change group img  API ERROR....", error);
+        toast.error("Error occured in change group img")
+    }
+    return result
+}
+
+export const changeGroupName = async (data) => {
+    let result
+    try {  
+        const response = await apiConnector("POST",CHANGE_GROUP_NAME_API,data);
+        console.log(" Change group Name response", response);
+        result = response
+        toast.success("Group Name Change Successfully")
+    }
+    catch (error) {
+        console.log("change group Name  API ERROR....", error);
+        toast.error("Error occured in change group Name")
+    }
+    return result
+}
+
+export const changeGroupDesc = async (data) => {
+    let result
+    try {  
+        const response = await apiConnector("POST",CHANGE_GROUP_DESC_API,data);
+        console.log(" Change group desc response", response);
+        result = response
+        toast.success("Group desc Change Successfully")
+    }
+    catch (error) {
+        console.log("change group desc  API ERROR....", error);
+        toast.error("Error occured in change group desc")
+    }
+    return result
 }
