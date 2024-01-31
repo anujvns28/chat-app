@@ -5,7 +5,7 @@ import { dismissUserGroupAdmin, existFromGroup, makeUserGroupAdmin } from '../..
 
 
 
-const GroupMembers = ({ member, groupInfo, setUserInof, fetchUserData ,fetchGroupInformation}) => {
+const GroupMembers = ({ member, groupInfo, setUserInof, fetchUserData }) => {
     const { user } = useSelector((state) => state.user);
     const [openModal,setOpenModal] = useState(false);
     const [admin,setAdmin] = useState();

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,forwardRef,useImperativeHandle } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { FaArrowLeft } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
@@ -14,6 +14,7 @@ import SelectUser from '../group/SelectUser';
 import GroupMembers from '../group/GroupMembers';
 import { MdEdit } from "react-icons/md";
 import EditGroupInfo from '../group/EditGroupInfo';
+import GroupImg from '../group/GroupImg';
 
 
 const ChatInfo = ({
@@ -22,7 +23,7 @@ const ChatInfo = ({
     fetchUserData,
     setCurrentChat,
     isUserLogin
-}) => {
+},ref,props) => {
     const { user } = useSelector((state) => state.user);
     const { chat } = useSelector((state) => state.chat);
     const [groupInfo, setGroupInfo] = useState();
@@ -32,11 +33,18 @@ const ChatInfo = ({
     const [isYouBlocked, setIsYouBlocked] = useState(false);
     const [isBlockedByYou, setIsBlockedByYou] = useState(false);
     const [selectUser, setSelectUser] = useState(false);
-    const [editGroupInfo,setEditGroupInfo] = useState(false);
+    const [editGroupInfo, setEditGroupInfo] = useState(false);
+    const [editGroupImg, setEditGroupImg] = useState(false);
+    const [admins, setAdmins] = useState([]);
 
     const dispatch = useDispatch();
-
-
+    
+    useImperativeHandle(ref,() => ({
+        handleBlockModal,
+        handleDeletModal,
+        handleExistGroupModal
+    }))
+    
     const checkBlockStatus = () => {
         setIsBlockedByYou(false);
         setIsYouBlocked(false)
@@ -53,10 +61,18 @@ const ChatInfo = ({
     const fetchGroupInformation = async () => {
         console.log("Calling....")
         const result = await fetchGroupInfo(chat._id);
-        console.log(result,"this is group information")
+        console.log(result, "this is group information")
         if (result) {
-            setGroupInfo(result.data)
+            setGroupInfo(result.data);
+            const adminArray = []
+            result.data.data.admin.map((mem) => {
+                adminArray.push(mem._id)
+            })
+            setAdmins(adminArray)
+
         }
+
+
     }
 
     const handleCommonGroup = async () => {
@@ -71,7 +87,7 @@ const ChatInfo = ({
             }
         }
     }
-    
+
 
     // deleting user
     const handleDeleteUser = async () => {
@@ -170,12 +186,12 @@ const ChatInfo = ({
     }
 
     //edit group info
-    const handleEditGroupInfo = (text,type,placeHolder,inputName) => {
-      const  data = {
-            text : text,
+    const handleEditGroupInfo = (text, type, placeHolder, inputName) => {
+        const data = {
+            text: text,
             inputType: type,
-            placeHolder:placeHolder,
-            inputName : inputName
+            placeHolder: placeHolder,
+            inputName: inputName
         }
 
         setEditGroupInfo(data);
@@ -183,9 +199,9 @@ const ChatInfo = ({
 
     useEffect(() => {
         checkBlockStatus()
-    }, []);
+    }, [chat]);
 
-    
+
 
 
     return (
@@ -204,36 +220,58 @@ const ChatInfo = ({
 
                         { /* image */}
                         <div className='flex items-center justify-center py-7 flex-col bg-slate-700 border border-black'>
-                            <img
-                                src={chat.isGroup ? chat.groupImg : chat.image}
-                                className='w-[200px] h-[200px] rounded-full'
-                            />
-                             <div className='flex flex-row gap-3 items-center'>
-                             <p className='text-2xl font-semibold text-white'>{chat.isGroup ? chat.groupName : chat.name}</p>
-                             <p onClick={() => handleEditGroupInfo(
-                                "Edit Group Name",
-                                "text"
-                                ,"Enter Group Name",
-                                "groupName"
-                                )}
-                             className='text-2xl font-semibold text-white cursor-pointer'><MdEdit/></p>
-                             </div>
+                            {
+                                chat.isGroup ?
+                                    <img onClick={() => setEditGroupImg(true)}
+                                        src={chat.isGroup ? chat.groupImg : chat.image}
+                                        className='w-[200px] h-[200px] rounded-full cursor-pointer'
+                                    />
+                                    : <img
+                                        src={chat.isGroup ? chat.groupImg : chat.image}
+                                        className='w-[200px] h-[200px] rounded-full'
+                                    />
+                            }
+                            {editGroupImg && <GroupImg imgUrl={chat.groupImg}
+                                setEditGroupImg={setEditGroupImg}
+                                isUserLogin={isUserLogin}
+                                admins={admins}
+                            />}
+
+                            <div className='flex flex-row gap-3 items-center'>
+                                <p className='text-2xl font-semibold text-white'>{chat.isGroup ? chat.groupName : chat.name}</p>
+                                {
+                                    admins.includes(user._id) &&
+                                    <p onClick={() => handleEditGroupInfo(
+                                        "Edit Group Name",
+                                        "text"
+                                        , "Enter Group Name",
+                                        "groupName"
+                                    )}
+                                        className='text-2xl font-semibold text-white cursor-pointer'><MdEdit />
+                                    </p>
+                                }
+                            </div>
                             <p className='text-xl text-white'>{chat.isGroup ? `Group : ${chat.members.length}` : chat.email}</p>
                         </div>
 
                         <div className='w-full mt-2  p-6 border border-black'>
                             <p className='text-green-300'>About</p>
                             <div className='flex flex-row gap-3 items-center justify-between'>
-                            <p className='text-xl text-white'>{!chat.isGroup ? chat.about ?  chat.about : "You are not set About !!"  : chat.isGroup ? chat.isGroup :  " Group adim set About !!"}</p>
-                             <p onClick={() => handleEditGroupInfo(
-                                "Edit Group Disprection",
-                                "text",
-                                "Enter Group Description",
-                                "groupDes"
-                                )}
-                             className='text-2xl font-semibold text-white cursor-pointer'><MdEdit/></p>
-                             </div>
-                            
+                                {!chat.isGroup && <p className='text-xl text-white'>{chat.about ? chat.about : "You are not set About !!"}</p>}
+                                {chat.isGroup && <p className='text-xl text-white'>{chat.groupDesc ? chat.groupDesc : "Group description not set yet!!"}</p>}
+                                {
+                                    admins.includes(user._id) &&
+                                    <p onClick={() => handleEditGroupInfo(
+                                        "Edit Group Disprection",
+                                        "text",
+                                        "Enter Group Description",
+                                        "groupDes"
+                                    )}
+                                        className='text-2xl font-semibold text-white cursor-pointer'><MdEdit />
+                                    </p>
+                                }
+                            </div>
+
                         </div>
                         {/* common group */}
                         {
@@ -275,13 +313,13 @@ const ChatInfo = ({
                                     groupInfo &&
                                     groupInfo.data.members.map((member) => {
                                         return <div>
-                                            <GroupMembers 
-                                             member={member} 
-                                             chat={chat} 
-                                             setUserInof={setUserInof} 
-                                             fetchUserData={fetchUserData}
-                                             groupInfo={groupInfo}
-                                             />
+                                            <GroupMembers
+                                                member={member}
+                                                chat={chat}
+                                                setUserInof={setUserInof}
+                                                fetchUserData={fetchUserData}
+                                                groupInfo={groupInfo}
+                                            />
                                         </div>
                                     })
                                 }
@@ -340,26 +378,34 @@ const ChatInfo = ({
             }
 
             {
-                userInfo && <ChatUserInfo setUserInof={setUserInof} userData={userInfo} setGroupInfo={setGroupInfo} />
+                userInfo && <ChatUserInfo
+                 setUserInof={setUserInof} 
+                 userData={userInfo} 
+                 setGroupInfo={setGroupInfo} 
+                 />
             }
             {
                 modalData && <Modal modalData={modalData} />
             }
             {
-                selectUser && <SelectUser setSelectUser={setSelectUser} groupInfo={groupInfo.data} fetchUserData={fetchUserData} />
+                selectUser && <SelectUser 
+                setSelectUser={setSelectUser} 
+                groupInfo={groupInfo.data} 
+                fetchUserData={fetchUserData} 
+                />
             }
             {
-            editGroupInfo && 
-            <EditGroupInfo 
-            editGroupInfo={editGroupInfo} 
-            setEditGroupInfo={setEditGroupInfo} 
-            groupId={chat._id} 
-            isUserLogin={isUserLogin}
-            
-            />
+                editGroupInfo &&
+                <EditGroupInfo
+                    editGroupInfo={editGroupInfo}
+                    setEditGroupInfo={setEditGroupInfo}
+                    groupId={chat._id}
+                    isUserLogin={isUserLogin}
+
+                />
             }
         </div>
     )
 }
 
-export default ChatInfo
+export default forwardRef(ChatInfo)

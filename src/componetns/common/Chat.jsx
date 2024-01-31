@@ -28,6 +28,10 @@ const Chat = ({ socket , isUserLogin} ) => {
   const [chatInfo, setChatInof] = useState(false);
   const [userData,setUserData] = useState();
   const [blockedUser,setBlockedUser] = useState([]);
+  const [chatFeture,setChatFeture] = useState(false);
+  const chatFetureRef = useRef();
+
+  const childRef = useRef();
 
   setTimeout(() => setTime(false), 7000)
 
@@ -169,6 +173,18 @@ const Chat = ({ socket , isUserLogin} ) => {
     setMsz(message)
   }, [emoji])
 
+
+
+  window.addEventListener("click",(e) => {
+    if(e.target !== chatFetureRef.current){
+      setChatFeture(false)
+    }else{
+      return
+    }
+  })
+
+  console.log(childRef,"printing child ref")
+
   
   return (
     <div className='w-full h-full'>
@@ -178,9 +194,10 @@ const Chat = ({ socket , isUserLogin} ) => {
           className='h-full w-full flex items-center justify-center text-xl font-semibold'>You Have not Seleced any chat</div>
           : <div className='w-full h-full flex '>
             <div className={`${chatInfo ? "w-[60%]" : "w-full"}  border h-full  border-black flex flex-col gap-1`}>
-            <div onClick={() => setChatInof(true)}
-            className='h-[70px] w-full mb-2 bg-slate-200 flex flex-row justify-between p-2 cursor-pointer'>
-              <div className='flex flex-row gap-2'>
+            <div
+            className='h-[70px] w-full mb-2 bg-slate-200 flex flex-row justify-between p-2 '>
+              <div  onClick={() => setChatInof(true)}
+              className='flex flex-row gap-2 w-[80%] cursor-pointer'>
                 <div>
                   <img className='w-[50px] h-[50px] rounded-full'
                     src={!currentChat.isGroup ? currentChat.image : currentChat.groupImg} />
@@ -196,9 +213,22 @@ const Chat = ({ socket , isUserLogin} ) => {
               <div className='flex flex-row gap-7 items-center justify-center text-xl px-3'>
                 <p className='cursor-pointer'><IoVideocam /></p>
                 <p className='cursor-pointer'><IoSearchSharp /></p>
-                <p className='cursor-pointer'><BsThreeDotsVertical /></p>
+                <p ref={chatFetureRef}
+                onClick={() => setChatFeture(true)}
+                className='cursor-pointer relative'><BsThreeDotsVertical pointerEvents="none" /></p>
+               {
+                chatFeture &&  <div className='top-16 right-12 z-50 absolute w-[130px] py-3 px-2 cursor-pointer bg-slate-400 rounded-md flex flex-col  text-sm'>
+                <p onClick={() => setChatInof(true)}
+                className='flex px-2 py-1 hover:bg-slate-500 rounded-md'>Chat info</p>
+                 {  chat.isGroup && <p onClick={() => childRef.current.handleExistGroupModal()}
+                 className='flex  px-2 py-1 hover:bg-slate-500 rounded-md'>Exist Group</p>}
+                {!chat.isGroup &&  <p className='flex  px-2 py-1 hover:bg-slate-500 rounded-md'>Delete chat</p>}
+                {!chat.isGroup &&  <p className='flex  px-2 py-1 hover:bg-slate-500 rounded-md'>Block chat</p>}
+              </div>
+               }
               </div>
             </div>
+
             <div className='h-[88%] w-full  flex flex-col justify-between '>
               {/* chats */}
               <div className='w-full  h-[87%] overflow-auto  sticky top-3'>
@@ -299,6 +329,7 @@ const Chat = ({ socket , isUserLogin} ) => {
            chatInfo && 
           <div className='w-[40%] h-full'>
            <ChatInfo 
+           ref={childRef}
            setChatInof={setChatInof} 
            userData={userData} 
            fetchUserData={fetchUserData}

@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { FaArrowLeft } from 'react-icons/fa'
 import SubmmitButton from '../../common/SubmmitButton'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { changeGroupDesc, changeGroupName } from '../../../service/operations/group'
+import { setCurrentChat } from '../../../slice/currentChat'
 
 const EditGroupInfo = ({editGroupInfo,setEditGroupInfo,groupId,isUserLogin,}) => {
     const {user} = useSelector((state) => state.user);
+    const dispatch = useDispatch();
     const [formData,setFormData] = useState();
     
     const handleChange = (e) => {
@@ -23,13 +25,16 @@ const EditGroupInfo = ({editGroupInfo,setEditGroupInfo,groupId,isUserLogin,}) =>
             groupId: groupId,
         }
         if(editGroupInfo.inputName == "groupName"){
-            await changeGroupName(data);
+        const result = await changeGroupName(data);
+            dispatch(setCurrentChat(result.data.data))
         }
         if(editGroupInfo.inputName == "groupDes"){
-            await changeGroupDesc(data);
+        const result = await changeGroupDesc(data);
+        dispatch(setCurrentChat(result.data.data))
         }
 
-        setEditGroupInfo(null)
+        setEditGroupInfo(null);
+       
         isUserLogin();
     }
 

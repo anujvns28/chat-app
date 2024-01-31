@@ -146,6 +146,7 @@ export const dismissUserGroupAdmin = async (data) => {
 
 export const changeGroupImg = async (data) => {
     let result
+    const toastId = toast.loading("loading...")
     try {  
         const response = await apiConnector(
             "POST",
@@ -163,6 +164,7 @@ export const changeGroupImg = async (data) => {
         console.log("change group img  API ERROR....", error);
         toast.error("Error occured in change group img")
     }
+    toast.dismiss(toastId)
     return result
 }
 
