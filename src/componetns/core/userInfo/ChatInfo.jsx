@@ -232,7 +232,7 @@ const ChatInfo = ({
                                     />
                             }
                             {editGroupImg && <GroupImg imgUrl={chat.groupImg}
-                                setEditGroupImg={setEditGroupImg}
+                                setEditProfileImg={setEditGroupImg}
                                 isUserLogin={isUserLogin}
                                 admins={admins}
                             />}

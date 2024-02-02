@@ -66,7 +66,8 @@ const Chat = ({ socket , isUserLogin} ) => {
       const data = {
         msz: msz,
         groupMem: groupMember,
-        userId: user._id
+        userId: user._id,
+        groupId : chat._id
       }
       await sendGroupMsz(data)
     }
@@ -104,7 +105,7 @@ const Chat = ({ socket , isUserLogin} ) => {
   const fetchChat = async () => {
     if (chat) {
       const data = {
-        chat: !chat.isGroup ? chat._id : groupMember,
+        chat: !chat.isGroup ? chat._id : chat._id,
         userId: user._id
       }
       // group chat
@@ -130,7 +131,6 @@ const Chat = ({ socket , isUserLogin} ) => {
   if (chats) {
     socket.on("msg-recive", (data) => {
       setSocketMess(data);
-      // console.log(data,"socket data")
     })
   }
 
@@ -217,13 +217,10 @@ const Chat = ({ socket , isUserLogin} ) => {
                 onClick={() => setChatFeture(true)}
                 className='cursor-pointer relative'><BsThreeDotsVertical pointerEvents="none" /></p>
                {
-                chatFeture &&  <div className='top-16 right-12 z-50 absolute w-[130px] py-3 px-2 cursor-pointer bg-slate-400 rounded-md flex flex-col  text-sm'>
+                chatFeture &&  <div className=' top-[10%]  z-50 absolute w-[130px] py-3 px-2 cursor-pointer bg-slate-400 rounded-md flex flex-col  text-sm'>
                 <p onClick={() => setChatInof(true)}
                 className='flex px-2 py-1 hover:bg-slate-500 rounded-md'>Chat info</p>
-                 {  chat.isGroup && <p onClick={() => childRef.current.handleExistGroupModal()}
-                 className='flex  px-2 py-1 hover:bg-slate-500 rounded-md'>Exist Group</p>}
-                {!chat.isGroup &&  <p className='flex  px-2 py-1 hover:bg-slate-500 rounded-md'>Delete chat</p>}
-                {!chat.isGroup &&  <p className='flex  px-2 py-1 hover:bg-slate-500 rounded-md'>Block chat</p>}
+                 {/* add fetures */}
               </div>
                }
               </div>

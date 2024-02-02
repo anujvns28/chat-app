@@ -15,7 +15,10 @@ export const userEndPoints = {
     GET_USERDATA_API : BASE_URL + "/user/getUser",
     DELETE_USER_API : BASE_URL + "/user/deleteUser",
     ADD_USER_IN_CONTACT_API : BASE_URL + "/user/addUserinContact",
-    GET_ALL_USERS_API : BASE_URL + "/user/getAllUsers"
+    GET_ALL_USERS_API : BASE_URL + "/user/getAllUsers",
+    CHANGE_USER_IMG_API : BASE_URL + "/user/changeUserImage",
+    CHANGE_USER_NAME_API : BASE_URL + "/user/changeUserName",
+    CHANGE_USER_ABOUT_API : BASE_URL + "/user/changeUserDesc",
 }
 
 export const chatEndPoints = {

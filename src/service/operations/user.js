@@ -11,7 +11,10 @@ const {
     GET_USERDATA_API,
     ADD_USER_IN_CONTACT_API,
     DELETE_USER_API,
-    GET_ALL_USERS_API
+    GET_ALL_USERS_API,
+    CHANGE_USER_ABOUT_API,
+    CHANGE_USER_IMG_API,
+    CHANGE_USER_NAME_API
 } = userEndPoints
 
 export const acceptRequest = async (data) => {
@@ -155,5 +158,58 @@ export const fetchAllUser = async (data) => {
         console.log("all user fetching API ERROR....", error);
     }
     return result
+}
 
+export const changeUserImg = async (data) => {
+    let result
+    const toastId = toast.loading("loading...")
+    try {  
+        const response = await apiConnector(
+            "POST",
+            CHANGE_USER_IMG_API,
+            data,
+            {
+                "Content-Type": "multipart/form-data",
+            }
+            );
+        console.log(" Change User img response", response);
+        result = response
+        toast.success("Dp Change Successfully")
+    }
+    catch (error) {
+        console.log(" Dp  API ERROR....", error);
+        toast.error("Error occured in change user img")
+    }
+    toast.dismiss(toastId)
+    return result
+}
+
+export const changeUserName = async (data) => {
+    let result
+    try {  
+        const response = await apiConnector("POST",CHANGE_USER_NAME_API,data);
+        console.log(" Change User Name response", response);
+        result = response
+        toast.success("User Name Change Successfully")
+    }
+    catch (error) {
+        console.log("change User Name  API ERROR....", error);
+        toast.error("Error occured in change User Name")
+    }
+    return result
+}
+
+export const changeUserDesc = async (data) => {
+    let result
+    try {  
+        const response = await apiConnector("POST",CHANGE_USER_ABOUT_API,data);
+        console.log(" Change user desc response", response);
+        result = response
+        toast.success("user desc Change Successfully")
+    }
+    catch (error) {
+        console.log("user group desc  API ERROR....", error);
+        toast.error("Error occured in change group user")
+    }
+    return result
 }

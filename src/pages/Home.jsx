@@ -201,7 +201,7 @@ const Home = () => {
                 </div>
                 : <div className='w-[30%] h-full border-black flex flex-col gap-1'>
                   {/* userINfo */}
-                  <UserInfo setUserInof={setUserInof} userData={userData}/>
+                  <UserInfo setUserInof={setUserInof} userData={userData}  isUserLogin={isUserLogin}/>
                 </div>
             }
 
