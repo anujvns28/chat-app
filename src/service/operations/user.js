@@ -14,7 +14,8 @@ const {
     GET_ALL_USERS_API,
     CHANGE_USER_ABOUT_API,
     CHANGE_USER_IMG_API,
-    CHANGE_USER_NAME_API
+    CHANGE_USER_NAME_API,
+    FETCH_USER_REQUEST_API
 } = userEndPoints
 
 export const acceptRequest = async (data) => {
@@ -210,6 +211,19 @@ export const changeUserDesc = async (data) => {
     catch (error) {
         console.log("user group desc  API ERROR....", error);
         toast.error("Error occured in change group user")
+    }
+    return result
+}
+
+export const fetchUserRequest = async (data) => {
+    let result
+    try {  
+        const response = await apiConnector("POST",FETCH_USER_REQUEST_API,data);
+        console.log("fetch User Request", response);
+        result = response
+    }
+    catch (error) {
+        console.log("user group desc  API ERROR....", error);
     }
     return result
 }

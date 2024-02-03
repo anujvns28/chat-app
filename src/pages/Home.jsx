@@ -17,6 +17,8 @@ import CreateGroup from '../componetns/core/group/CreateGroup';
 import { fetchGroups } from '../service/operations/group';
 import UserInfo from '../componetns/core/userInfo/UserInfo';
 import AllUsers from '../componetns/common/AllUsers';
+import Request from '../componetns/core/UserFeture/Request';
+import Status from '../componetns/core/UserFeture/Status';
 
 
 const socket = io("http://localhost:4000");
@@ -35,6 +37,9 @@ const Home = () => {
   const [isGroup, setIsGroup] = useState(false);
   const [userInfo, setUserInof] = useState(false);
   const [allUser,setAllUser] = useState(false);
+  const [requests,setRequests] = useState(false);
+  const [status,setStatus] = useState(false);
+  const [anuj,setAnuj] = useState(false);
   const otherFetureRef = useRef();
 
   console.log("anujji")
@@ -86,15 +91,21 @@ const Home = () => {
     }
   }, [user])
 
- 
-
+  const handleWhatIsVisible = (data) => {
+    setAnuj(true)
+    if(data == "status"){
+      setStatus(true)
+    }else {
+      setUserInof(true)
+    }
+  }
   return (
     <div>
       {
         userData
           ? <div className='flex w-screen h-screen border flex-row gap-1 border-black p-5'>
             {
-              !userInfo ?
+             !anuj  ?
                 <div className='w-[30%] border h-full border-black flex flex-col gap-1'>
                   <div className='h-[115px] w-full  flex flex-col gap-1  '>
                     <div className='h-[70px] w-full  bg-slate-30 flex justify-between bg-slate-200 px-4 '>
@@ -102,12 +113,14 @@ const Home = () => {
                         <img
                           className='w-[50px] h-[50px] rounded-full cursor-pointer'
                           src={userData.image}
-                          onClick={() => setUserInof(true)}
+                          onClick={() => handleWhatIsVisible("userInfo")}
                         />
                       </div>
                       <div className='flex  flex-row gap-8 items-center justify-end w-[60%] text-xl '>
-                        <p className='cursor-pointer'><BsChatLeftDots /></p>
-                        <p className='cursor-pointer'><BsRecordCircle /></p>
+                        <p onClick={() => setRequests(true)}
+                        className='cursor-pointer'><BsChatLeftDots /></p>
+                        <p onClick={() => handleWhatIsVisible("status")}
+                        className='cursor-pointer'><BsRecordCircle /></p>
                         <p
                           onClick={() => setFraindRequest(!fraindRequest)}
                           className='cursor-pointer'><BiCommentAdd /></p>
@@ -121,7 +134,7 @@ const Home = () => {
                           {
                             otherFeautre &&
                             <div className='w-[210px] flex flex-col gap-2 p-4 bg-slate-400 rounded-md text-base 
-                      absolute right-3 top-10 '>
+                                absolute right-3 top-10 '>
                               <p onClick={() => setCreateGroup(true)}
                                 className='cursor-pointer hover:bg-slate-500 p-1 rounded-md'>New group</p>
                               <p onClick={() => setAllUser(true)}
@@ -132,9 +145,6 @@ const Home = () => {
                           }
                         </div>
                       </div>
-
-
-
 
                     </div>
                     <div className='h-[45px] w-full  px-3 flex flex-row py-1 '>
@@ -201,7 +211,8 @@ const Home = () => {
                 </div>
                 : <div className='w-[30%] h-full border-black flex flex-col gap-1'>
                   {/* userINfo */}
-                  <UserInfo setUserInof={setUserInof} userData={userData}  isUserLogin={isUserLogin}/>
+                   {userInfo && <UserInfo setUserInof={setUserInof} userData={userData}  isUserLogin={isUserLogin} setAnuj={setAnuj}/>}
+                   {status && <Status setStatus={setStatus} setAnuj={setAnuj}/>}
                 </div>
             }
 
@@ -215,6 +226,9 @@ const Home = () => {
             {/* all user */}
             {
              allUser && <div> <AllUsers setAllUser={setAllUser} isUserLogin={isUserLogin}/></div>
+            }
+            {
+              requests && <div> <Request setRequests={setRequests} allUser={allUser}/> </div>
             }
 
             {

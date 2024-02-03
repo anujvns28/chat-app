@@ -19,6 +19,7 @@ export const userEndPoints = {
     CHANGE_USER_IMG_API : BASE_URL + "/user/changeUserImage",
     CHANGE_USER_NAME_API : BASE_URL + "/user/changeUserName",
     CHANGE_USER_ABOUT_API : BASE_URL + "/user/changeUserDesc",
+    FETCH_USER_REQUEST_API : BASE_URL + "/user/fetchRequest"
 }
 
 export const chatEndPoints = {

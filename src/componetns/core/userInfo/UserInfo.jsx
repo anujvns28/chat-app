@@ -4,7 +4,7 @@ import GroupImg from '../group/GroupImg';
 import EditUserProfileInof from './EditUserProfileInof';
 import { MdEdit } from 'react-icons/md';
 
-const UserInfo = ({ setUserInof, userData, isUserLogin }) => {
+const UserInfo = ({ setUserInof, userData, isUserLogin ,setAnuj}) => {
     const [editUserProfileImg, setEditUserProfileImg] = useState();
     const [editUserProfile, setEditUserProfile] = useState();
     
@@ -19,6 +19,11 @@ const UserInfo = ({ setUserInof, userData, isUserLogin }) => {
         setEditUserProfile(data);
     }
 
+    const handleCloseUserInfo = () => {
+     setAnuj(false)
+     setUserInof(false)
+    } 
+
     return (
         <div className='w-full h-full border border-black flex items-center justify-center transition-all '>
             {
@@ -27,7 +32,7 @@ const UserInfo = ({ setUserInof, userData, isUserLogin }) => {
                     : <div className='w-full h-full bg-slate-700'>
                         <div className='w-full h-[110px] bg-slate-400 flex  items-end justify-start py-4 '>
                             <div className='flex flex-row gap-6 items-center justify-start  w-full pl-6 text-slate-100'>
-                                <p onClick={() => setUserInof(false)}
+                                <p onClick={handleCloseUserInfo}
                                     className='text-xl cursor-pointer'><FaArrowLeft /></p>
                                 <p className='text-xl font-semibold'>Profile</p>
                             </div>

@@ -182,9 +182,6 @@ const Chat = ({ socket , isUserLogin} ) => {
       return
     }
   })
-
-  console.log(childRef,"printing child ref")
-
   
   return (
     <div className='w-full h-full'>
