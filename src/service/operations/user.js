@@ -15,7 +15,9 @@ const {
     CHANGE_USER_ABOUT_API,
     CHANGE_USER_IMG_API,
     CHANGE_USER_NAME_API,
-    FETCH_USER_REQUEST_API
+    FETCH_USER_REQUEST_API,
+    ADD_STATUS_API,
+    FETCH_STATUS_API
 } = userEndPoints
 
 export const acceptRequest = async (data) => {
@@ -224,6 +226,43 @@ export const fetchUserRequest = async (data) => {
     }
     catch (error) {
         console.log("user group desc  API ERROR....", error);
+    }
+    return result
+}
+
+export const createStatus = async (data) => {
+    let result
+    let toastId = toast.loading("loading...")
+    try {  
+        const response = await apiConnector(
+            "POST"
+        ,ADD_STATUS_API,
+        data,
+        {
+            "Content-Type": "multipart/form-data",
+        }
+        );
+        console.log(" adding status response", response);
+        result = response
+        toast.success("status added Successfully")
+    }
+    catch (error) {
+        console.log("status adding API ERROR....", error);
+        toast.error("Error occured in adding status");
+    }
+    toast.dismiss(toastId)
+    return result
+}
+
+export const fetchUserStatus = async (data) => {
+    let result
+    try {  
+        const response = await apiConnector("POST",FETCH_STATUS_API,data);
+        console.log("fetch User  Status", response);
+        result = response
+    }
+    catch (error) {
+        console.log("user status fetching  API ERROR....", error);
     }
     return result
 }

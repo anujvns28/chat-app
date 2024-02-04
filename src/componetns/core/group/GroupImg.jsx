@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentChat } from '../../../slice/currentChat'
 import { toast } from 'react-toastify'
 import { changeUserImg } from '../../../service/operations/user'
+import { setUser } from '../../../slice/user'
 
 const GroupImg = ({ setEditProfileImg, imgUrl, isUserLogin, admins }) => {
     const { user } = useSelector((state) => state.user);
@@ -22,6 +23,7 @@ const GroupImg = ({ setEditProfileImg, imgUrl, isUserLogin, admins }) => {
             dispatch(setCurrentChat(result.data.data))
         }else{
             const result = await changeUserImg({ userId: user._id,  image: groupFile })
+            dispatch(setUser(result.data.data))
         }
         isUserLogin()
     }

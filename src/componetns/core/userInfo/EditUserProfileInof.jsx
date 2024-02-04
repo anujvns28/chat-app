@@ -2,11 +2,13 @@ import React, { useState } from 'react'
 import { FaArrowLeft } from 'react-icons/fa'
 import SubmmitButton from '../../common/SubmmitButton'
 import { changeUserDesc, changeUserName } from '../../../service/operations/user';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '../../../slice/user';
 
 const EditUserProfileInof = ({setEditUserProfile,editUserProfile,isUserLogin}) => {
     const [formData,setFormData] = useState();
     const {user} = useSelector((state) => state.user);
+    const dispatch = useDispatch();
 
     const handleChange = (e) => {
         setFormData((prev) => ({
@@ -24,9 +26,11 @@ const EditUserProfileInof = ({setEditUserProfile,editUserProfile,isUserLogin}) =
 
         if(editUserProfile.inputName == "userName"){
             const result = await changeUserName(data);
+            dispatch(setUser(result.data.data))
             }
             if(editUserProfile.inputName == "about"){
             const result = await changeUserDesc(data);
+            dispatch(setUser(result.data.data))
             }
     
             setEditUserProfile(null);

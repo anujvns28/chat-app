@@ -19,6 +19,7 @@ import UserInfo from '../componetns/core/userInfo/UserInfo';
 import AllUsers from '../componetns/common/AllUsers';
 import Request from '../componetns/core/UserFeture/Request';
 import Status from '../componetns/core/UserFeture/Status';
+import StatusModal from '../componetns/core/UserFeture/StatusModal';
 
 
 const socket = io("http://localhost:4000");
@@ -99,6 +100,8 @@ const Home = () => {
       setUserInof(true)
     }
   }
+
+  
   return (
     <div>
       {
@@ -212,7 +215,7 @@ const Home = () => {
                 : <div className='w-[30%] h-full border-black flex flex-col gap-1'>
                   {/* userINfo */}
                    {userInfo && <UserInfo setUserInof={setUserInof} userData={userData}  isUserLogin={isUserLogin} setAnuj={setAnuj}/>}
-                   {status && <Status setStatus={setStatus} setAnuj={setAnuj}/>}
+                   {status && <Status setStatus={setStatus} setAnuj={setAnuj} userData={userData} contact={contact}/>}
                 </div>
             }
 
@@ -237,6 +240,7 @@ const Home = () => {
                 contact={contact}
               /></div>
             }
+            
 
           </div>
           : <div>Loading...</div>
