@@ -3,7 +3,7 @@ import { FaArrowLeft } from 'react-icons/fa6'
 import { useSelector } from 'react-redux'
 import { RiDeleteBinLine } from "react-icons/ri";
 import ViewStatus from './ViewStatus';
-import { fetchUserStatus } from '../../../service/operations/user';
+import { deleteStatus, fetchUserStatus } from '../../../service/operations/user';
 
 const StatusModal = ({ setCheckStatus, userData }) => {
     const { user } = useSelector((state) => state.user);
@@ -16,6 +16,11 @@ const StatusModal = ({ setCheckStatus, userData }) => {
         if(result){
             setStatus(result.data.data);
         }
+    }
+
+    const handleDeletStatus = async(data) => {
+        await deleteStatus({userId:userData._id,statusId:data._id})
+        handleFetchStatus();
     }
     
     useEffect(() => {
@@ -66,7 +71,8 @@ const StatusModal = ({ setCheckStatus, userData }) => {
                                        </div>
                                     </div>
                                     <div>
-                                        <p className={`${user._id === userData._id ? "": "invisible"} text-xl font-semibold`}><RiDeleteBinLine/></p>
+                                        <p onClick={() => handleDeletStatus(data)}
+                                        className={`${user._id === userData._id ? "cursor-pointer": "invisible"} text-xl font-semibold `}><RiDeleteBinLine/></p>
                                     </div>
                                 </div>
                             })

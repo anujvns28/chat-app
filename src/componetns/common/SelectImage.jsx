@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { createAccount } from '../../service/operations/auth';
 import SubmmitButton from './SubmmitButton';
 import { toast } from 'react-toastify';
+import { RxCross1 } from "react-icons/rx";
 
 
 const SelectImage = ({text,getImgUrl}) => {
@@ -16,7 +17,7 @@ const SelectImage = ({text,getImgUrl}) => {
   
   const handleAvatars = async () => {
     for (let i = 1; i <= 5; i++) {
-      const image = `https://api.multiavatar.com/Binx%${Math.round(Math.random() * 1000)}ond.svg`
+      const image = `https://api.multiavatar.com/Binx%${Math.round(Math.random() * 100)}ond.svg`
       avatarArray.push(image)
     }
 
@@ -72,11 +73,25 @@ const SelectImage = ({text,getImgUrl}) => {
 
 
   return (
-    <div className='flex flex-col w-full  items-center justify-center '>
-      Select imagges
+    <div className='flex flex-col w-full h-full items-center justify-center min-h-[400px] '>
+     <p className='text-xl font-semibold mb-5'> Select Profile Image </p>
+
+     {
+          profileFile
+            ? <div>
+              <button className='text-xl font-semibold w-full flex justify-end'
+              onClick={handleClick}><RxCross1/></button>
+              <img src={profileImage}
+
+                className='w-[150px] h-[150px] rounded-full'
+              />
+            </div>
+            : <div> </div>
+        }
+
       {
         avatrs.length === 5 ?
-          <div className='flex flex-row gap-3'>
+          <div className='flex flex-row gap-3 items-center justify-center p-2  flex-wrap m-3'>
             {
               avatrs.map((img,index) => {
                 let url = img
@@ -95,28 +110,24 @@ const SelectImage = ({text,getImgUrl}) => {
           : <div>Loading...</div>
       }
 
-      <div>
-        <input
+      <div className='w-full '>       
+       <label className='flex flex-col justify-center items-center w-full'>
+        <p className='cursor-pointer flex justify-center px-3 py-2 text-blue-500 border border-black rounded-md w-fit'>Chouse File</p>
+       <input
+       className='invisible'
           type='file'
           onChange={handelFile}
         />
-
-        {
-          profileFile
-            ? <div>
-              <img src={profileImage}
-
-                className='w-[150px] h-[150px] rounded-full'
-              />
-
-              <button onClick={handleClick}>X</button>
-            </div>
-            : <div> </div>
-        }
+       </label>
       </div>
 
      
-        <SubmmitButton text={text}  handleTask={handlemyfun}/>
+      <button
+        onClick={handlemyfun}
+        className=" rounded-[8px] bg-yellow-400 hover:bg-yellow-500 py-[8px] px-[12px] font-medium text-richblack-900 w-full max-w-[320px]"
+      >
+        Get Otp
+      </button>
     </div>
   )
 }

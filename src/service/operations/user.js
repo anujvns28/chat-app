@@ -17,7 +17,8 @@ const {
     CHANGE_USER_NAME_API,
     FETCH_USER_REQUEST_API,
     ADD_STATUS_API,
-    FETCH_STATUS_API
+    FETCH_STATUS_API,
+    DELETE_STATUS_API
 } = userEndPoints
 
 export const acceptRequest = async (data) => {
@@ -264,5 +265,26 @@ export const fetchUserStatus = async (data) => {
     catch (error) {
         console.log("user status fetching  API ERROR....", error);
     }
+    return result
+}
+
+export const deleteStatus = async (data) => {
+    let result
+    const toastId = toast.loading("loading...")
+    try {  
+        const response = await apiConnector(
+            "POST",
+            DELETE_STATUS_API,
+            data,
+            );
+        console.log(" Delete status response", response);
+        result = response
+        toast.success("status deleted Successfully")
+    }
+    catch (error) {
+        console.log(" status Deletion ERROR....", error);
+        toast.error("Error occured in Deleting status")
+    }
+    toast.dismiss(toastId)
     return result
 }

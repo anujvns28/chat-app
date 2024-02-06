@@ -8,7 +8,7 @@ import Request from "./pages/Request";
 
 function App() {
   return (
-    <div>
+    <div className="h-full w-full">
      <Routes>
       <Route path="/" element={<Home/>}></Route>
       <Route path="/login" element={<Login/>}></Route>

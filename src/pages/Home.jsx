@@ -103,13 +103,13 @@ const Home = () => {
 
   
   return (
-    <div>
+    <div className='h-full w-full overflow-y-hidden'>
       {
         userData
-          ? <div className='flex w-screen h-screen border flex-row gap-1 border-black p-5'>
+          ? <div className='flex w-screen h-screen  flex-row gap-1  p-2'>
             {
              !anuj  ?
-                <div className='w-[30%] border h-full border-black flex flex-col gap-1'>
+                <div className='w-[30%] min-w-[300px] border h-full border-black flex flex-col gap-1'>
                   <div className='h-[115px] w-full  flex flex-col gap-1  '>
                     <div className='h-[70px] w-full  bg-slate-30 flex justify-between bg-slate-200 px-4 '>
                       <div className=' w-[100px] h-full  flex items-center '>
@@ -212,14 +212,14 @@ const Home = () => {
 
                   </div>
                 </div>
-                : <div className='w-[30%] h-full border-black flex flex-col gap-1'>
+                : <div className='w-[30%] h-screen flex flex-col gap-1'>
                   {/* userINfo */}
                    {userInfo && <UserInfo setUserInof={setUserInof} userData={userData}  isUserLogin={isUserLogin} setAnuj={setAnuj}/>}
                    {status && <Status setStatus={setStatus} setAnuj={setAnuj} userData={userData} contact={contact}/>}
                 </div>
             }
 
-            <div className='w-[70%]'>
+            <div className='w-[70%] min-w-[350px] h-full px-2'>
               <Chat socket={socket} userData={userData} isUserLogin={isUserLogin} />
             </div>
 

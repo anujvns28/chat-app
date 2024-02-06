@@ -234,9 +234,9 @@ const Chat = ({ socket , isUserLogin} ) => {
                       {
                         chats.map((item) => {
                           return <div ref={scrollRef}
-                            className={`scrollbar-h-* scrollbar  scrollbar-track-gray-100 text-black px-10 w-full flex ${item.senderId == user._id ? "justify-end" : "justify-start"}`}>
-                            <p className={`${item.senderId === user._id ? "bg-green-500 w-fit text-black" : "bg-slate-500 w-fit items-center flex"}
-                              p-2 rounded-md max-w-[40%]`}>
+                            className={`scrollbar-h-* scrollbar  scrollbar-track-gray-100 text-black px-2 w-full flex ${item.senderId == user._id ? "justify-end" : "justify-start"}`}>
+                            <p className={`${item.senderId === user._id ? "bg-green-500 w-fit  text-black" : "bg-slate-500 w-fit items-center flex"}
+                              p-2 rounded-md max-w-[70%]`}>
                               {item.msz}
                             </p>
 
@@ -276,7 +276,7 @@ const Chat = ({ socket , isUserLogin} ) => {
 
                   <div
                     className={`${showEmoji ? "visible " : "invisible"} absolute -top-[480px] left-6`}>
-                    <EmojiPicker onEmojiClick={handleEmoji} />
+                    <EmojiPicker onEmojiClick={handleEmoji} height={200} />
                   </div>
                 </form>
               </div>
