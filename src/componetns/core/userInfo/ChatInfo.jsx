@@ -23,7 +23,7 @@ const ChatInfo = ({
     fetchUserData,
     setCurrentChat,
     isUserLogin
-},ref,props) => {
+},ref) => {
     const { user } = useSelector((state) => state.user);
     const { chat } = useSelector((state) => state.chat);
     const [groupInfo, setGroupInfo] = useState();
