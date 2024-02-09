@@ -7,7 +7,7 @@ const ViewStatus = ({statusData,setViewStatus}) => {
 
   return (
     <div className='fixed inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm'>
-            <div className='w-[30%] h-auto bg-slate-400 min-h-[60%]'>
+            <div className='w-[30%] min-w-[320px] h-auto bg-slate-400 min-h-[60%]'>
                 <div className='w-full h-[70px] bg-slate-300 flex  items-end justify-start py-4 '>
                     <div className='flex flex-row gap-6 items-center justify-start  w-full pl-6 text-slate-100'>
                         <p onClick={() => setViewStatus(null)}

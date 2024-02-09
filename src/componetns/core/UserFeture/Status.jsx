@@ -41,7 +41,7 @@ const Status = ({setStatus,setAnuj,userData,contact}) => {
     console.log(contact,"pringi contact")
 
   return (
-    <div className='w-full h-full border border-black flex items-center justify-center transition-all '>
+    <div className='w-full h-full min-w-[340px] border border-black flex items-center justify-center transition-all '>
             {
                 !userData ?
                     <p>loading...</p>
@@ -77,8 +77,8 @@ const Status = ({setStatus,setAnuj,userData,contact}) => {
                         <p className='text-xl font-semibold text-white'>Contacts</p>
                         <div className='flex flex-col gap-2'>
                         {
-                          contact.map((data) => {
-                            return <div className=''>
+                          contact.map((data,index) => {
+                            return <div key={index} className=''>
                               {
                                 data.status.length > 0 &&
                                 <div onClick={() => handleViewStatus(data)}

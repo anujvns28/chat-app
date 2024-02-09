@@ -232,8 +232,9 @@ const Chat = ({ socket , isUserLogin} ) => {
                   </div>
                     : <div className='flex flex-col gap-4'>
                       {
-                        chats.map((item) => {
+                        chats.map((item,index) => {
                           return <div ref={scrollRef}
+                          key={index}
                             className={`scrollbar-h-* scrollbar  scrollbar-track-gray-100 text-black px-2 w-full flex ${item.senderId == user._id ? "justify-end" : "justify-start"}`}>
                             <p className={`${item.senderId === user._id ? "bg-green-500 w-fit  text-black" : "bg-slate-500 w-fit items-center flex"}
                               p-2 rounded-md max-w-[70%]`}>

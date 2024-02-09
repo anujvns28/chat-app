@@ -42,7 +42,7 @@ const Signup = () => {
     }
     dispatch(setSignupData(data))
     getOtp(formData.email,navigate);
-    navigate("/verfyEmail")
+    
     }else {
       toast.error("Error in Creating user")
       navigate("/signup")

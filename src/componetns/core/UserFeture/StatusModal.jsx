@@ -29,7 +29,7 @@ const StatusModal = ({ setCheckStatus, userData }) => {
 
     return (
         <div className='fixed inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm'>
-            <div className='w-[30%] h-auto bg-slate-400 min-h-[60%]'>
+            <div className='w-[30%] min-w-[320px] h-auto bg-slate-400 min-h-[60%]'>
                 <div className='w-full h-[70px] bg-slate-300 flex  items-end justify-start py-4 '>
                     <div className='flex flex-row gap-6 items-center justify-start  w-full pl-6 text-slate-100'>
                         <p onClick={() => setCheckStatus(null)}
@@ -45,7 +45,7 @@ const StatusModal = ({ setCheckStatus, userData }) => {
                             <img src={userData.image} className='w-[60px] h-[60px] rounded-full' />
                         </div>
                         <div className='flex flex-col gap-1 justify-center'>
-                            <p>{userData.name}</p>
+                           
                             <p>{userData.email}</p>
                         </div>
                     </div>
@@ -56,10 +56,10 @@ const StatusModal = ({ setCheckStatus, userData }) => {
                         status &&
                         <div className='flex flex-col gap-2'>
                         {
-                            status.map((data) => {
-                                return <div className='flex flex-row justify-between items-center border border-black p-2'>
+                            status.map((data,index) => {
+                                return <div key={index} className='flex flex-row justify-between items-center border border-black p-2'>
                                     <div onClick={() => setViewStatus(data)}
-                                    className='cursor-pointer flex flex-row justify-between items-center '>
+                                    className='cursor-pointer flex w-[90%] flex-row justify-between items-center '>
                                        <div className='flex flex-row gap-3'>
                                        <div className='border-4 border-green-500 rounded-full'>
                                             <img src={userData.image} className='w-[50px] h-[50px] rounded-full' />

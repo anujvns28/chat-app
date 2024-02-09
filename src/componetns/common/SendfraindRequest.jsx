@@ -19,7 +19,7 @@ const SendfraindRequest = ({setFraindRequest}) => {
   return (
    <div className='fixed inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm'>
     <form onSubmit={handleSubmit}
-   className='w-[25%] absolute bg-slate-400 border border-black p-4 rounded-md flex flex-col gap-2'>
+   className='w-[25%] min-w-[300px] absolute bg-slate-400 border border-black p-4 rounded-md flex flex-col gap-2'>
    <div className='flex w-full justify-end'> 
    <p onClick={() => setFraindRequest(false)}
    className='text-xl font-semibold p-2 cursor-pointer'><RxCross1/></p></div>

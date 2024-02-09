@@ -68,8 +68,8 @@ const SelectUser = ({setSelectUser,groupInfo,fetchUserData}) => {
 
                            <div className='flex flex-col  justify-center gap-2 p-2'>
                            {
-                                allContact.allUser.map((userData) => {
-                                    return <div>
+                                allContact.allUser.map((userData,index) => {
+                                    return <div key={index}>
                                      {
                                         members.includes(userData._id) ?
                                         <div className='opacity-50 flex flex-row gap-3 border border-black items-center p-2'>

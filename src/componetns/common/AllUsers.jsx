@@ -40,8 +40,8 @@ const AllUsers = ({ setAllUser,isUserLogin }) => {
 
                            <div className='flex flex-col  justify-center gap-2 p-2'>
                            {
-                                allContact.allUser.map((userData) => {
-                                    return <div className='flex flex-row gap-3 justify-between border border-black items-center p-2'>
+                                allContact.allUser.map((userData,index) => {
+                                    return <div key={index} className='flex flex-row gap-3 justify-between border border-black items-center p-2'>
                                         <div className='flex flex-row gap-3'>
                                         <div>
                                             <img className='w-[50px] h-[50px] rounded-full'

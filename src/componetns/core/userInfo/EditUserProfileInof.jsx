@@ -39,7 +39,7 @@ const EditUserProfileInof = ({setEditUserProfile,editUserProfile,isUserLogin}) =
     }
   return (
     <div className='fixed inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm'>
-            <div className='w-[60%] h-auto bg-slate-400 min-h-[60%]'>
+            <div className='w-[60%] min-w-[300px]  bg-slate-400 '>
                 <div className='w-full h-[70px] bg-slate-300 flex  items-end justify-start py-4 '>
                     <div className='flex flex-row gap-6 items-center justify-start  w-full pl-6 text-slate-100'>
                         <p  onClick={() => setEditUserProfile(null)}
@@ -48,7 +48,7 @@ const EditUserProfileInof = ({setEditUserProfile,editUserProfile,isUserLogin}) =
                     </div>
                 </div>
 
-                <form >
+                <form className='border border-black p-5 flex flex-col gap-2'>
                     <label>
                         <p>{editUserProfile.placeHolder}</p>
                         <input
@@ -57,10 +57,12 @@ const EditUserProfileInof = ({setEditUserProfile,editUserProfile,isUserLogin}) =
                         placeholder={editUserProfile.placeHolder}
                         required
                         onChange={handleChange}
+                        className='w-full rounded-[0.5rem] bg-richblack-700 p-[12px] text-richblack-5 outline-none
+                        border-b border-pure-greys-300'
                         />
                     </label>
                     <button type='submit' onClick={handleSubmit}>
-                        <SubmmitButton text={"edit"}/>
+                        <SubmmitButton text={"Edit"}/>
                     </button>
                 </form>
 

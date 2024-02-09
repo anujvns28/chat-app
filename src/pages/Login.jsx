@@ -21,7 +21,7 @@ const Login = () => {
 
   const handelSubmit = (e) => {
     e.preventDefault();
-    loginUser(formData,dispatch)
+    loginUser(formData,dispatch,navigate)
   }
   return (
     <div className='flex w-full h-screen  items-center justify-center flex-col gap-2 '>

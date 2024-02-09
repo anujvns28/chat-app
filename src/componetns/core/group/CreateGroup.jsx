@@ -85,7 +85,7 @@ const CreateGroup = ({ setCreateGroup, contact }) => {
                 : <div className='flex flex-row gap-3 flex-wrap items-center justify-center'>
                   {
                     members.map((mem) => {
-                      return <div key={mem.id} className='relative flex flex-col items-center justify-center  p-2'>
+                      return <div  key={mem.id} className='relative flex flex-col items-center justify-center  p-2'>
                         <img
                           className='w-[70px]  h-[70px] rounded-full cursor-pointer'
                           src={mem.image} />

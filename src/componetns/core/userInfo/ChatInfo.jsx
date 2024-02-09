@@ -282,8 +282,8 @@ const ChatInfo = ({
                                     <div>
                                         <p className='px-4 py-2 text-white'>{commonGroup.length} group in common</p>
                                         {
-                                            commonGroup.map((group) => {
-                                                return <div onClick={() => dispatch(setCurrentChat(group))}
+                                            commonGroup.map((group,index) => {
+                                                return <div key={index} onClick={() => dispatch(setCurrentChat(group))}
                                                     className='flex flex-row items-center justify-between py-2 cursor-pointer px-5 hover:bg-slate-500'>
                                                     <div className='flex flex-row gap-3 items-center justify-start '>
                                                         <img
@@ -311,8 +311,8 @@ const ChatInfo = ({
                                 </div>
                                 {
                                     groupInfo &&
-                                    groupInfo.data.members.map((member) => {
-                                        return <div>
+                                    groupInfo.data.members.map((member,index) => {
+                                        return <div key={index}>
                                             <GroupMembers
                                                 member={member}
                                                 chat={chat}

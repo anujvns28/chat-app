@@ -183,8 +183,8 @@ const Home = () => {
                           {
                             contact ? <div className='flex flex-col gap-2'>
                               {
-                                contact.map((contact) => {
-                                  return <div className={`flex flex-col gap-2 ${chat && contact._id == chat._id ? "bg-slate-400" : ""}`}>
+                                contact.map((contact,index) => {
+                                  return <div key={index} className={`flex flex-col gap-2 ${chat && contact._id == chat._id ? "bg-slate-400" : ""}`}>
                                     <Contact userData={contact} />
                                   </div>
                                 })
@@ -198,8 +198,8 @@ const Home = () => {
                           {
                             group ? <div className='flex flex-col gap-2'>
                               {
-                                group.map((contact) => {
-                                  return <div className={`flex flex-col gap-2 ${chat && contact._id == chat._id ? "bg-slate-400" : ""}`}>
+                                group.map((contact,index) => {
+                                  return <div key={index} className={`flex flex-col gap-2 ${chat && contact._id == chat._id ? "bg-slate-400" : ""}`}>
                                     <Contact userData={contact} />
                                   </div>
                                 })
@@ -212,7 +212,7 @@ const Home = () => {
 
                   </div>
                 </div>
-                : <div className='w-[30%] h-screen flex flex-col gap-1'>
+                : <div className='w-[30%] min-w-[320px] h-screen flex flex-col gap-1'>
                   {/* userINfo */}
                    {userInfo && <UserInfo setUserInof={setUserInof} userData={userData}  isUserLogin={isUserLogin} setAnuj={setAnuj}/>}
                    {status && <Status setStatus={setStatus} setAnuj={setAnuj} userData={userData} contact={contact}/>}

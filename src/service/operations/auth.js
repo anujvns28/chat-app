@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { setToken, setUser } from "../../slice/user";
 import { authEndPoints } from "../api";
 import { apiConnector } from "../apiConnecter";
@@ -12,6 +13,7 @@ const {
 
 export const getOtp = async (email,navigate) => {
     console.log(GET_OTP_API,"this is url")
+    const toastId = toast.loading("loading...")
     try {
         const response = await apiConnector("POST", GET_OTP_API,{email:email});
         console.log("otp response", response);
@@ -20,8 +22,9 @@ export const getOtp = async (email,navigate) => {
     }
     catch (error) {
         console.log("OTP RESPONSE  API ERROR....", error);
-       
+        toast.error(error.response.data.message)
     }
+    toast.dismiss(toastId)
 
 }
 
@@ -45,7 +48,8 @@ export const createAccount = async (data) => {
 
 }
 
-export const loginUser = async (data,dispatch) => {
+export const loginUser = async (data,dispatch,navigate) => {
+    const toastId = toast.loading("loading...")
     try {
         const response = await apiConnector("POST",
          LOGIN_API,
@@ -57,11 +61,14 @@ export const loginUser = async (data,dispatch) => {
          localStorage.setItem("user",JSON.stringify(response.data.user))
          dispatch(setToken(response.data.token))
          dispatch(setUser(response.data.user))
+         toast.success("Login successfull")
+         navigate("/")
         
     }
     catch (error) {
         console.log("Login  RESPONSE  API ERROR....", error);
-       
+       toast.error("error occured in login")
     }
+    toast.dismiss(toastId)
 
 }
