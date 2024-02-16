@@ -205,12 +205,12 @@ const ChatInfo = ({
 
 
     return (
-        <div className='w-full h-full border border-black flex items-center justify-center transition-all '>
+        <div className='w-full h-full border bg-slate-700 border-black flex items-center p-1 justify-center transition-all '>
             {
                 !chat ?
                     <p>loading...</p>
-                    : <div className={`${userInfo ? "w-[0px] " : "w-full"} h-full flex flex-col bg-slate-700 overflow-y-auto pb-10`}>
-                        <div className='w-full h-[70px] bg-slate-300 flex  items-end justify-start py-4 '>
+                    : <div className={`${userInfo ? "w-[0px] " : "w-full"} h-full flex flex-col  overflow-y-auto pb-10`}>
+                        <div className='w-full h-[70px] mb-1 bg-slate-300 flex  items-end justify-start py-4 '>
                             <div className='flex flex-row gap-6 items-center justify-start  w-full pl-6 text-slate-100'>
                                 <p onClick={() => setChatInof(false)}
                                     className='text-xl cursor-pointer'><FaArrowLeft /></p>
@@ -219,7 +219,7 @@ const ChatInfo = ({
                         </div>
 
                         { /* image */}
-                        <div className='flex items-center justify-center py-7 flex-col bg-slate-700 border border-black'>
+                        <div className='flex items-center justify-center py-7 flex-col  border border-green-300'>
                             {
                                 chat.isGroup ?
                                     <img onClick={() => setEditGroupImg(true)}
@@ -254,7 +254,7 @@ const ChatInfo = ({
                             <p className='text-xl text-white'>{chat.isGroup ? `Group : ${chat.members.length}` : chat.email}</p>
                         </div>
 
-                        <div className='w-full mt-2  p-6 border border-black'>
+                        <div className='w-full mt-2  p-6 border border-green-300'>
                             <p className='text-green-300'>About</p>
                             <div className='flex flex-row gap-3 items-center justify-between'>
                                 {!chat.isGroup && <p className='text-xl text-white'>{chat.about ? chat.about : "You are not set About !!"}</p>}
@@ -276,11 +276,11 @@ const ChatInfo = ({
                         {/* common group */}
                         {
                             !chat.isGroup &&
-                            <div>
+                            <div className='border-green-300 border mt-2'>
                                 {
                                     commonGroup &&
-                                    <div>
-                                        <p className='px-4 py-2 text-white'>{commonGroup.length} group in common</p>
+                                    <div >
+                                        <p className='px-4 py-2 text-white'>{commonGroup.length} Common group </p>
                                         {
                                             commonGroup.map((group,index) => {
                                                 return <div key={index} onClick={() => dispatch(setCurrentChat(group))}
@@ -302,7 +302,7 @@ const ChatInfo = ({
 
                         {
                             chat.isGroup &&
-                            <div className='w-full border border-black p-3 mt-3'>
+                            <div className='w-full border  p-3 mt-3 border-green-300'>
 
                                 <div onClick={() => setSelectUser(true)}
                                     className='flex flex-row gap-3  items-center py-3 cursor-pointer px-5 hover:bg-slate-500'>
@@ -327,7 +327,7 @@ const ChatInfo = ({
                             </div>
                         }
 
-                        <div className='w-full mt-2  border border-black '>
+                        <div className='w-full mt-2  border border-green-300'>
                             {
                                 chat.isGroup ?
                                     <div onClick={handleExistGroupModal}

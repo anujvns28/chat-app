@@ -28,7 +28,7 @@ const AllUsers = ({ setAllUser,isUserLogin }) => {
 
     return (
         <div className='fixed inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm'>
-            <div className='w-[40%] border border-black  flex items-center justify-center transition-all p-4'>
+            <div className='w-[40%] min-w-[340px] border border-black  flex items-center justify-center transition-all '>
                 {
                     !allContact ?
                         <p>loading...</p>
@@ -41,15 +41,14 @@ const AllUsers = ({ setAllUser,isUserLogin }) => {
                            <div className='flex flex-col  justify-center gap-2 p-2'>
                            {
                                 allContact.allUser.map((userData,index) => {
-                                    return <div key={index} className='flex flex-row gap-3 justify-between border border-black items-center p-2'>
+                                    return <div key={index} className='flex flex-wrap  flex-row gap-3 justify-between border border-black items-center p-2'>
                                         <div className='flex flex-row gap-3'>
                                         <div>
                                             <img className='w-[50px] h-[50px] rounded-full'
                                                 src={userData.image} />
                                         </div>
-                                        <div className='flex flex-col gap-1 pt-y'>
+                                        <div className='flex items-center justify-center'>
                                             <p>{userData.name}</p>
-                                            <p>{userData.email}</p>
                                         </div>
                                         </div>
 

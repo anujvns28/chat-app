@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { FaArrowLeft } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
-import SubmmitButton from '../../common/SubmmitButton'
 import { changeGroupImg } from '../../../service/operations/group'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentChat } from '../../../slice/currentChat'
@@ -18,13 +17,14 @@ const GroupImg = ({ setEditProfileImg, imgUrl, isUserLogin, admins }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(admins){
+        if (admins) {
             const result = await changeGroupImg({ userId: user._id, groupId: chat._id, image: groupFile })
             dispatch(setCurrentChat(result.data.data))
-        }else{
-            const result = await changeUserImg({ userId: user._id,  image: groupFile })
+        } else {
+            const result = await changeUserImg({ userId: user._id, image: groupFile })
             dispatch(setUser(result.data.data))
         }
+        setEditProfileImg(null)
         isUserLogin()
     }
 
@@ -69,35 +69,43 @@ const GroupImg = ({ setEditProfileImg, imgUrl, isUserLogin, admins }) => {
                                     </label>
                                     {
                                         groupFile &&
-                                        <button type='submit' onClick={handleSubmit}>
-                                            <SubmmitButton text={"Change"} />
-                                        </button>
+                                        <div className='flex w-full items-center justify-center'>
+                                            <button
+                                                onClick={handleSubmit}
+                                                className="my-4 rounded-[8px] w-[80%] bg-yellow-400 hover:bg-yellow-500 py-[8px] px-[12px] font-medium text-richblack-900"
+                                            >
+                                                Change
+                                            </button>
+                                        </div>
                                     }
                                 </form>
                             }
                         </div>
                     }
 
-                     {
+                    {
                         !admins &&
                         <div>
-                                <form >
-                                    <label>
-                                        <p className='text-2xl font-semibold text-white cursor-pointer flex justify-end px-8'><MdEdit /></p>
-                                        <input
-                                            type='file'
-                                            className='invisible'
-                                            onChange={handleChange}
-                                            required
-                                        />
-                                    </label>
-                                    {
-                                        groupFile &&
-                                        <button type='submit' onClick={handleSubmit}>
-                                            <SubmmitButton text={"Change"} />
-                                        </button>
-                                    }
-                                </form>
+                            <form className='flex flex-col items-center py-8'>
+                                <label>
+                                    <p className='text-2xl font-semibold text-white cursor-pointer flex justify-end px-8'><MdEdit /></p>
+                                    <input
+                                        type='file'
+                                        className='invisible'
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </label>
+                                {
+                                    groupFile &&
+                                    <button
+                                        onClick={handleSubmit}
+                                        className="mt-6 w-[80%] rounded-[8px] bg-yellow-400 hover:bg-yellow-500 py-[8px] px-[12px] font-medium text-richblack-900"
+                                    >
+                                        Change
+                                    </button>
+                                }
+                            </form>
                         </div>
                     }
 

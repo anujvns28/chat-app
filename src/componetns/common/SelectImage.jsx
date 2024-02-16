@@ -126,7 +126,7 @@ const SelectImage = ({text,getImgUrl}) => {
         onClick={handlemyfun}
         className=" rounded-[8px] bg-yellow-400 hover:bg-yellow-500 py-[8px] px-[12px] font-medium text-richblack-900 w-full max-w-[320px]"
       >
-        Get Otp
+      {text}
       </button>
     </div>
   )

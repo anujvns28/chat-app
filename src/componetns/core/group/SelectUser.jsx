@@ -56,7 +56,7 @@ const SelectUser = ({setSelectUser,groupInfo,fetchUserData}) => {
     console.log(members,"ljkdfalj")
   return (
     <div className='fixed inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm'>
-            <div className='w-[35%] border border-black  flex items-center justify-center transition-all p-4'>
+            <div className='w-[35%] flex-col min-w-[340px] border border-black  flex items-center justify-center transition-all p-4'>
                 {
                     !allContact ?
                         <p>loading...</p>
@@ -80,9 +80,9 @@ const SelectUser = ({setSelectUser,groupInfo,fetchUserData}) => {
                                             <img className='w-[50px] h-[50px] rounded-full'
                                                 src={userData.image} />
                                         </div>
-                                        <div className='flex flex-col gap-1 pt-y'>
+                                        <div className='flex flex-col justify-center'>
                                             <p>{userData.name}</p>
-                                            <p>{userData.email}</p>
+                                            
                                         </div>
                                         </div>
 
@@ -99,9 +99,9 @@ const SelectUser = ({setSelectUser,groupInfo,fetchUserData}) => {
                                             <img className='w-[50px] h-[50px] rounded-full'
                                                 src={userData.image} />
                                         </div>
-                                        <div className='flex flex-col gap-1 pt-y'>
+                                        <div className='flex flex-col items-center justify-center'>
                                             <p>{userData.name}</p>
-                                            <p>{userData.email}</p>
+                                            
                                         </div>
                                         </div>
 
@@ -113,8 +113,12 @@ const SelectUser = ({setSelectUser,groupInfo,fetchUserData}) => {
                            </div>
                         </div>
                 }
-               <button onClick={handleAddUser}
-               className='px-3 py-2 rounded-md bg-yellow-500'>Add</button>
+               <button
+        onClick={handleAddUser}
+        className="mt-6 rounded-[8px] w-full bg-yellow-400 hover:bg-yellow-500 py-[8px] px-[12px] font-medium text-richblack-900"
+      >
+        Add Members
+      </button>
             </div>
         </div>
   )

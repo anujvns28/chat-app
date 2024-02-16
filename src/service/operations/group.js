@@ -78,6 +78,7 @@ export const fetchCommonGroup = async (data) => {
 
 // exist group
 export const existFromGroup = async (data) => {
+    const toastId = toast.loading("loading..")
     let result
     try {  
         const response = await apiConnector("POST", EXIST_GROUP_API,data);
@@ -89,6 +90,7 @@ export const existFromGroup = async (data) => {
         console.log("exist user API ERROR....", error);
         toast.error("Error occured in existing")
     }
+    toast.dismiss(toastId)
     return result
 
 }
@@ -96,6 +98,7 @@ export const existFromGroup = async (data) => {
 // add user in group
 export const addUsersInGroup = async (data) => {
     let result
+    const toastId = toast.loading("loading..")
     try {  
         const response = await apiConnector("POST", ADD_USER_IN_GROUP_API,data);
         console.log("adding user in group response", response);
@@ -106,6 +109,7 @@ export const addUsersInGroup = async (data) => {
         console.log("addinguser API ERROR....", error);
         toast.error("Error occured in adding")
     }
+    toast.dismiss(toastId)
     return result
 
 }
@@ -114,6 +118,7 @@ export const addUsersInGroup = async (data) => {
 // add user in group admi
 export const makeUserGroupAdmin = async (data) => {
     let result
+    const toastId = toast.loading("loading..")
     try {  
         const response = await apiConnector("POST", MAKE_GROUP_ADMIN_API,data);
         console.log("Admin  group response", response);
@@ -124,22 +129,24 @@ export const makeUserGroupAdmin = async (data) => {
         console.log("admin API ERROR....", error);
         toast.error("Error occured in making admin")
     }
+    toast.dismiss(toastId)
     return result
-
 }
 
 export const dismissUserGroupAdmin = async (data) => {
     let result
+    const toastId = toast.loading("loading..")
     try {  
         const response = await apiConnector("POST", DISSMISS_GROUP_ADMIN_API,data);
         console.log(" Dissmiss Admin  group response", response);
         result = response
-        toast.success("user  successful dismissed admin")
+        toast.success("user  successful dismissed As admin")
     }
     catch (error) {
         console.log("admin dismiss API ERROR....", error);
         toast.error("Error occured in dismminsging admin")
     }
+    toast.dismiss(toastId)
     return result
 
 }
@@ -158,7 +165,7 @@ export const changeGroupImg = async (data) => {
             );
         console.log(" Change group img response", response);
         result = response
-        toast.success("Group img Change Successfully")
+        toast.success("Updated Successfully")
     }
     catch (error) {
         console.log("change group img  API ERROR....", error);
@@ -170,30 +177,34 @@ export const changeGroupImg = async (data) => {
 
 export const changeGroupName = async (data) => {
     let result
+    const toastId = toast.loading("loading..")
     try {  
         const response = await apiConnector("POST",CHANGE_GROUP_NAME_API,data);
         console.log(" Change group Name response", response);
         result = response
-        toast.success("Group Name Change Successfully")
+        toast.success("Update Successfully")
     }
     catch (error) {
         console.log("change group Name  API ERROR....", error);
         toast.error("Error occured in change group Name")
     }
+    toast.dismiss(toastId)
     return result
 }
 
 export const changeGroupDesc = async (data) => {
     let result
+    const toastId = toast.loading("loading..")
     try {  
         const response = await apiConnector("POST",CHANGE_GROUP_DESC_API,data);
         console.log(" Change group desc response", response);
         result = response
-        toast.success("Group desc Change Successfully")
+        toast.success("Update Successfully")
     }
     catch (error) {
         console.log("change group desc  API ERROR....", error);
         toast.error("Error occured in change group desc")
     }
+    toast.dismiss(toastId)
     return result
 }

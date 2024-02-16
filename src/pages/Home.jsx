@@ -11,7 +11,6 @@ import Contact from '../componetns/common/Contact';
 import { fetchContact, fetchUserInformaion } from '../service/operations/user';
 import SendfraindRequest from '../componetns/common/SendfraindRequest';
 import Chat from '../componetns/common/Chat';
-import { toast } from 'react-toastify';
 import io from "socket.io-client"
 import CreateGroup from '../componetns/core/group/CreateGroup';
 import { fetchGroups } from '../service/operations/group';
@@ -19,10 +18,10 @@ import UserInfo from '../componetns/core/userInfo/UserInfo';
 import AllUsers from '../componetns/common/AllUsers';
 import Request from '../componetns/core/UserFeture/Request';
 import Status from '../componetns/core/UserFeture/Status';
-import StatusModal from '../componetns/core/UserFeture/StatusModal';
 
 
-const socket = io("http://localhost:4000");
+
+const socket = io("http://localhost:3000");
 
 const Home = () => {
   const navigate = useNavigate();
@@ -44,10 +43,10 @@ const Home = () => {
   const otherFetureRef = useRef();
 
   console.log("anujji")
+  
   const isUserLogin = async () => {
     if (!token) {
       navigate("/login")
-
     } else {
       const result = await fetchContact(user._id);
       const groupResult = await fetchGroups(user._id);
@@ -81,6 +80,7 @@ const Home = () => {
   }, [])
 
   useEffect(() => {
+  console.log("chanigilljjk")
     if (user) {
       socket.emit("add-user", {
         userId: user._id,
@@ -90,7 +90,7 @@ const Home = () => {
     } else {
       return
     }
-  }, [user])
+  }, [])
 
   const handleWhatIsVisible = (data) => {
     setAnuj(true)
@@ -109,7 +109,7 @@ const Home = () => {
           ? <div className='flex w-screen h-screen  flex-row gap-1  p-2'>
             {
              !anuj  ?
-                <div className='w-[30%] min-w-[300px] border h-full border-black flex flex-col gap-1'>
+                <div className='w-[30%] min-w-[340px] border h-full border-black flex flex-col gap-1'>
                   <div className='h-[115px] w-full  flex flex-col gap-1  '>
                     <div className='h-[70px] w-full  bg-slate-30 flex justify-between bg-slate-200 px-4 '>
                       <div className=' w-[100px] h-full  flex items-center '>
@@ -212,14 +212,14 @@ const Home = () => {
 
                   </div>
                 </div>
-                : <div className='w-[30%] min-w-[320px] h-screen flex flex-col gap-1'>
+                : <div className='w-[30%] min-w-[340px] h-screen flex flex-col gap-1'>
                   {/* userINfo */}
                    {userInfo && <UserInfo setUserInof={setUserInof} userData={userData}  isUserLogin={isUserLogin} setAnuj={setAnuj}/>}
                    {status && <Status setStatus={setStatus} setAnuj={setAnuj} userData={userData} contact={contact}/>}
                 </div>
             }
 
-            <div className='w-[70%] min-w-[350px] h-full px-2'>
+            <div className='w-[70%] min-w-[360px]  px-2'>
               <Chat socket={socket} userData={userData} isUserLogin={isUserLogin} />
             </div>
 
@@ -238,6 +238,7 @@ const Home = () => {
               createGroup && <div> <CreateGroup
                 setCreateGroup={setCreateGroup}
                 contact={contact}
+                isUserLogin={isUserLogin}
               /></div>
             }
             

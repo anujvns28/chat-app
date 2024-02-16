@@ -21,7 +21,7 @@ const ViewOrAddStatus = ({fileUrl,setStatusFile,fileType,statusFile,user}) => {
     
   return (
     <div className='fixed inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm'>
-            <div className='w-[30%] h-auto bg-slate-400 min-h-[60%]'>
+            <div className='w-[30%] min-w-[340px] h-auto bg-slate-400'>
                 <div className='w-full h-[70px] bg-slate-300 flex  items-end justify-start py-4 '>
                     <div className='flex flex-row gap-6 items-center justify-start  w-full pl-6 text-slate-100'>
                         <p onClick={() => setStatusFile(null)}
@@ -34,9 +34,8 @@ const ViewOrAddStatus = ({fileUrl,setStatusFile,fileType,statusFile,user}) => {
                 {
                     
                    fileType === "image" && 
-                   <div className='flex flex-col gap-2'>
-                      <p>Image</p>
-                      <img src={fileUrl}/> 
+                   <div className='flex flex-col gap-2 '>
+                      <img src={fileUrl} height={30}/> 
                    </div>
                 } 
 

@@ -18,19 +18,42 @@ const {
     FETCH_USER_REQUEST_API,
     ADD_STATUS_API,
     FETCH_STATUS_API,
-    DELETE_STATUS_API
+    DELETE_STATUS_API,
+    REQEST_USER_DATA_API
 } = userEndPoints
 
-export const acceptRequest = async (data) => {
+export const acceptRequest = async (data,navigate) => {
     let result
+    const toastId = toast.loading("loading...")
     try {
         const response = await apiConnector("POST", ACCEPT_FRAIND_REQUST_API,data);
+        //console.log("accept request response", response);
+        result = response
+        toast.success("Successfully Accept Request")
+        navigate("/")
+    }
+    catch (error) {
+        console.log("accept request RESPONSE  API ERROR....", error);
+        toast.error("Try again")
+    }
+    toast.dismiss(toastId)
+    return result
+
+}
+
+
+export const fetchAcceptRequestData = async (data) => {
+    let result
+    const toastId = toast.loading("loading...")
+    try {
+        const response = await apiConnector("POST", REQEST_USER_DATA_API,{token:data});
         //console.log("accept request response", response);
         result = response
     }
     catch (error) {
         console.log("accept request RESPONSE  API ERROR....", error);
     }
+    toast.dismiss(toastId)
     return result
 
 }
@@ -71,6 +94,7 @@ export const sendFraindRequest = async (data) => {
 
 export const blockContact = async (data) => {
     let result
+    const toastId = toast.loading("loading...")
     try {  
         const response = await apiConnector("POST", BLOCK_USER_API,data);
         //console.log("block user response", response);
@@ -81,6 +105,7 @@ export const blockContact = async (data) => {
         console.log("block user API ERROR....", error);
         toast.error("Error occured in blocking")
     }
+    toast.dismiss(toastId)
     return result
 
 }
@@ -90,6 +115,7 @@ export const blockContact = async (data) => {
 
 export const unblockContact = async (data) => {
     let result
+    const toastId = toast.loading("loading..")
     try {  
         const response = await apiConnector("POST", UNBLOCK_USER_API,data);
         //console.log("unblock user response", response);
@@ -100,6 +126,7 @@ export const unblockContact = async (data) => {
         console.log("unblock user API ERROR....", error);
         toast.error("Error occured in unblocking")
     }
+    toast.dismiss(toastId)
     return result
 
 }
@@ -122,6 +149,7 @@ export const fetchUserInformaion = async (data) => {
 
 export const deletContact = async (data) => {
     let result
+    const toastId = toast.loading("loading..")
     try {  
         const response = await apiConnector("POST",DELETE_USER_API,data);
         console.log("delete user response", response);
@@ -132,6 +160,7 @@ export const deletContact = async (data) => {
         console.log("deletion user API ERROR....", error);
         toast.error("Error occured in deleting")
     }
+    toast.dismiss(toastId)
     return result
 
 }
@@ -191,6 +220,7 @@ export const changeUserImg = async (data) => {
 
 export const changeUserName = async (data) => {
     let result
+    const toastId = toast.loading("loading..")
     try {  
         const response = await apiConnector("POST",CHANGE_USER_NAME_API,data);
         console.log(" Change User Name response", response);
@@ -201,11 +231,13 @@ export const changeUserName = async (data) => {
         console.log("change User Name  API ERROR....", error);
         toast.error("Error occured in change User Name")
     }
+    toast.dismiss(toastId)
     return result
 }
 
 export const changeUserDesc = async (data) => {
     let result
+    const toastId = toast.loading("loading..")
     try {  
         const response = await apiConnector("POST",CHANGE_USER_ABOUT_API,data);
         console.log(" Change user desc response", response);
@@ -216,6 +248,7 @@ export const changeUserDesc = async (data) => {
         console.log("user group desc  API ERROR....", error);
         toast.error("Error occured in change group user")
     }
+    toast.dismiss(toastId)
     return result
 }
 

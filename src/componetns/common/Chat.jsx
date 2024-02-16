@@ -13,10 +13,10 @@ import ChatInfo from '../core/userInfo/ChatInfo';
 import { fetchUserInformaion } from '../../service/operations/user';
 
 
-const Chat = ({ socket , isUserLogin} ) => {
+const Chat = ({ socket, isUserLogin }) => {
   const { chat } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.user);
-  const [currentChat,setCurrentChat] = useState();
+  const [currentChat, setCurrentChat] = useState();
   const [time, setTime] = useState(true);
   const [msz, setMsz] = useState("");
   const [emoji, setEmoji] = useState('');
@@ -26,14 +26,12 @@ const Chat = ({ socket , isUserLogin} ) => {
   const [showMess, setshoMess] = useState(false);
   const [socketMess, setSocketMess] = useState();
   const [chatInfo, setChatInof] = useState(false);
-  const [userData,setUserData] = useState();
-  const [blockedUser,setBlockedUser] = useState([]);
-  const [chatFeture,setChatFeture] = useState(false);
+  const [userData, setUserData] = useState();
+  const [blockedUser, setBlockedUser] = useState([]);
+  const [chatFeture, setChatFeture] = useState(false);
   const chatFetureRef = useRef();
 
   const childRef = useRef();
-
-  setTimeout(() => setTime(false), 7000)
 
   let groupMember
   if (chat) {
@@ -43,20 +41,20 @@ const Chat = ({ socket , isUserLogin} ) => {
     }
   }
 
-  const fetchUserData = async() => {
+  const fetchUserData = async () => {
     const userInformation = await fetchUserInformaion(user._id);
-    if(userInformation){
+    if (userInformation) {
       setUserData(userInformation.data.data)
       let blockUser = [];
       userInformation.data.data.block.map((user) => blockUser.push(user.user));
       setBlockedUser(blockUser);
     }
   }
-  
+
   useEffect(() => {
     setCurrentChat(chat)
     fetchUserData();
-  },[chat])
+  }, [chat])
 
   // send message
   const handleSubmit = async (e) => {
@@ -67,7 +65,7 @@ const Chat = ({ socket , isUserLogin} ) => {
         msz: msz,
         groupMem: groupMember,
         userId: user._id,
-        groupId : chat._id
+        groupId: chat._id
       }
       await sendGroupMsz(data)
     }
@@ -103,6 +101,7 @@ const Chat = ({ socket , isUserLogin} ) => {
 
   // fatchig chats
   const fetchChat = async () => {
+    console.log("fetching chat... ji  s")
     if (chat) {
       const data = {
         chat: !chat.isGroup ? chat._id : chat._id,
@@ -124,7 +123,6 @@ const Chat = ({ socket , isUserLogin} ) => {
   }
 
   useEffect(() => {
-    setTime(true)
     fetchChat()
   }, [chat, showMess])
 
@@ -175,165 +173,200 @@ const Chat = ({ socket , isUserLogin} ) => {
 
 
 
-  window.addEventListener("click",(e) => {
-    if(e.target !== chatFetureRef.current){
+  window.addEventListener("click", (e) => {
+    if (e.target !== chatFetureRef.current) {
       setChatFeture(false)
-    }else{
+    } else {
       return
     }
   })
-  
+
   return (
-    <div className='w-full h-full'>
-      
+    <div className='w-full h-full '>
+
       {
         !currentChat ? <div
           className='h-full w-full flex items-center justify-center text-xl font-semibold'>You Have not Seleced any chat</div>
           : <div className='w-full h-full flex '>
             <div className={`${chatInfo ? "w-[60%]" : "w-full"}  border h-full  border-black flex flex-col gap-1`}>
-            <div
-            className='h-[70px] w-full mb-2 bg-slate-200 flex flex-row justify-between p-2 '>
-              <div  onClick={() => setChatInof(true)}
-              className='flex flex-row gap-2 w-[80%] cursor-pointer'>
-                <div>
-                  <img className='w-[50px] h-[50px] rounded-full'
-                    src={!currentChat.isGroup ? currentChat.image : currentChat.groupImg} />
+              <div
+                className='h-[70px] w-full mb-2 bg-slate-200 flex flex-row justify-between p-2 '>
+                <div onClick={() => setChatInof(true)}
+                  className='flex flex-row gap-2 w-[80%] cursor-pointer'>
+                  <div>
+                    <img className='w-[50px] h-[50px] rounded-full'
+                      src={!currentChat.isGroup ? currentChat.image : currentChat.groupImg} />
 
-                </div>
-                <div className='flex flex-col gap-2  justify-center'>
-                  <p className=''>{!currentChat.isGroup ? currentChat.name : currentChat.groupName}</p>
-                  {time && <p className='text-sm font-semibold'>click here for contact view</p>}
-                </div>
-
-              </div>
-
-              <div className='flex flex-row gap-7 items-center justify-center text-xl px-3'>
-                <p className='cursor-pointer'><IoVideocam /></p>
-                <p className='cursor-pointer'><IoSearchSharp /></p>
-                <p ref={chatFetureRef}
-                onClick={() => setChatFeture(true)}
-                className='cursor-pointer relative'><BsThreeDotsVertical pointerEvents="none" /></p>
-               {
-                chatFeture &&  <div className=' top-[10%]  z-50 absolute w-[130px] py-3 px-2 cursor-pointer bg-slate-400 rounded-md flex flex-col  text-sm'>
-                <p onClick={() => setChatInof(true)}
-                className='flex px-2 py-1 hover:bg-slate-500 rounded-md'>Chat info</p>
-                 {/* add fetures */}
-              </div>
-               }
-              </div>
-            </div>
-
-            <div className='h-[88%] w-full  flex flex-col justify-between '>
-              {/* chats */}
-              <div className='w-full  h-[87%] overflow-auto  sticky top-3'>
-                {
-                  !chats ? <div className='flex h-full items-center justify-center font-semibold text-xl'>
-                    <p>loading...</p>
                   </div>
-                    : <div className='flex flex-col gap-4'>
-                      {
-                        chats.map((item,index) => {
-                          return <div ref={scrollRef}
-                          key={index}
-                            className={`scrollbar-h-* scrollbar  scrollbar-track-gray-100 text-black px-2 w-full flex ${item.senderId == user._id ? "justify-end" : "justify-start"}`}>
-                            <p className={`${item.senderId === user._id ? "bg-green-500 w-fit  text-black" : "bg-slate-500 w-fit items-center flex"}
-                              p-2 rounded-md max-w-[70%]`}>
-                              {item.msz}
-                            </p>
+                  <div className='flex flex-col gap-2  justify-center'>
+                    <p className=''>{!currentChat.isGroup ? currentChat.name : currentChat.groupName}</p>
+                    {time && <p className='text-sm font-semibold'>click here for contact view</p>}
+                  </div>
 
+                </div>
+
+                <div className='flex flex-row gap-7 items-center justify-center text-xl px-3'>
+                  <p className='cursor-pointer'><IoVideocam /></p>
+                  <p className='cursor-pointer'><IoSearchSharp /></p>
+                  <p ref={chatFetureRef}
+                    onClick={() => setChatFeture(true)}
+                    className='cursor-pointer relative'><BsThreeDotsVertical pointerEvents="none" /></p>
+                  {
+                    chatFeture && <div className=' top-[10%]  z-50 absolute w-[130px] py-3 px-2 cursor-pointer bg-slate-400 rounded-md flex flex-col  text-sm'>
+                      <p onClick={() => setChatInof(true)}
+                        className='flex px-2 py-1 hover:bg-slate-500 rounded-md'>Chat info</p>
+                      {/* add fetures */}
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <div className='h-[88%] w-full  flex flex-col justify-between '>
+                {/* chats */}
+                {
+                  chat.isGroup ?
+                    <div className='w-full  h-[87%] overflow-auto  sticky top-3'>
+                      {
+                        !chats ? <div className='flex h-full items-center justify-center font-semibold text-xl'>
+                          <p>loading...</p>
+                        </div>
+                          : <div className='flex flex-col gap-4'>
+                            {
+                              chats.map((item, index) => {
+                                return <div ref={scrollRef}
+                                  key={index}
+                                  className={`scrollbar-h-* scrollbar scrollbar-track-gray-100 text-black px-2 w-full flex ${item.senderId._id == user._id ? "justify-end" : "justify-start"}`}>
+                                  <div className='flex flex-row gap-2 max-w-[70%]'>
+                                    {item.senderId._id != user._id &&  <p><img className=' rounded-full w-[30px] h-[30px]'
+                                      src={item.senderId.image} />
+                                    </p>}
+                                 
+                                    <div className={`${item.senderId._id === user._id ? "bg-green-500 w-fit  text-black" : "bg-slate-800 w-fit "}
+                              p-2 rounded-md w-full`}>
+                                      {item.senderId._id != user._id && <p className='text-green-500 w-full'>{item.senderId.name}</p>}
+                                      <p className={`${item.senderId._id === user._id ? "bg-green-500 w-fit  text-black" : " w-fit items-center flex text-white"}
+                               rounded-md max-w-[90%] leading-tight `}>
+                                        {item.msz}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              })
+                            }
                           </div>
-                        })
+                      }
+                    </div>
+
+                    : <div className='w-full  h-[87%] overflow-auto  sticky top-3'>
+                      {
+                        !chats ? <div className='flex h-full items-center justify-center font-semibold text-xl'>
+                          <p>loading...</p>
+                        </div>
+                          : <div className='flex flex-col gap-4'>
+                            {
+                              chats.map((item, index) => {
+                                return <div ref={scrollRef}
+                                  key={index}
+                                  className={`scrollbar-h-* scrollbar  scrollbar-track-gray-100 text-black px-2 w-full flex ${item.senderId == user._id ? "justify-end" : "justify-start"}`}>
+                                  <p className={`${item.senderId === user._id ? "bg-green-500 w-fit  text-black" : "bg-slate-500 w-fit items-center flex"}
+                            p-2 rounded-md max-w-[70%]`}>
+                                    {item.msz}
+                                  </p>
+
+                                </div>
+                              })
+                            }
+                          </div>
                       }
                     </div>
                 }
-              </div>
 
-              {/* inputs */}
-              {
-                !chat.isGroup ?                
-                 !blockedUser.includes(chat._id) ?
-                 <div className='h-[60px]  w-full  bg-slate-200 flex flex-row justify-between p-2'>
-                <form onSubmit={handleSubmit}
-                  className='w-full flex flex-row gap-2 relative'>
-                  <div className='flex w-full border border-black rounded-md'>
+                {/* inputs */}
+                {
+                  !chat.isGroup ?
+                    !blockedUser.includes(chat._id) ?
+                      <div className='h-[60px]  w-full  bg-slate-200 flex flex-row justify-between p-2'>
+                        <form onSubmit={handleSubmit}
+                          className='w-full flex flex-row gap-2 relative'>
+                          <div className='flex w-full border border-black rounded-md'>
 
-                    <div className='flex h-full items-center justify-center text-2xl
+                            <div className='flex h-full items-center justify-center text-2xl
                       font-semibold px-3 rounded-l-md bg-white'>
-                      <p onClick={() => setShowemoji(!showEmoji)}
-                        className='cursor-pointer'>{showEmoji ? <RxCross1 /> : <BsEmojiGrin />}</p>
-                    </div >
+                              <p onClick={() => setShowemoji(!showEmoji)}
+                                className='cursor-pointer'>{showEmoji ? <RxCross1 /> : <BsEmojiGrin />}</p>
+                            </div >
 
-                    <input
-                      required
-                      placeholder='Type a message'
-                      onChange={(e) => setMsz(e.target.value)}
-                      value={msz}
-                      className='w-full  outline-none p-2 rounded-r-md text-xl  placeholder'
-                    />
-                  </div>
-                  <button>
-                    <SubmmitButton text={"Send"} />
-                  </button>
+                            <input
+                              required
+                              placeholder='Type a message'
+                              onChange={(e) => setMsz(e.target.value)}
+                              value={msz}
+                              className='w-full  outline-none p-2 rounded-r-md text-xl  placeholder'
+                            />
+                          </div>
+                          <button>
+                            <SubmmitButton text={"Send"} />
+                          </button>
 
-                  <div
-                    className={`${showEmoji ? "visible " : "invisible"} absolute -top-[480px] left-6`}>
-                    <EmojiPicker onEmojiClick={handleEmoji} height={200} />
-                  </div>
-                </form>
-              </div>
-              : <div className='h-[60px]  w-full  bg-slate-200 flex flex-row justify-center items-center p-2'>
-               <p>You can not send message to block contact</p>
-              </div>
+                          <div
+                            className={`${showEmoji ? "visible " : "invisible"} absolute -top-[480px] left-6`}>
+                            <EmojiPicker onEmojiClick={handleEmoji} height={200} />
+                          </div>
+                        </form>
+                      </div>
+                      : <div className='h-[60px]  w-full  bg-slate-200 flex flex-row justify-center items-center p-2'>
+                        <p>You can not send message to block contact</p>
+                      </div>
 
-              : <div className='h-[60px]  w-full  bg-slate-200 flex flex-row justify-between p-2'>
-              <form onSubmit={handleSubmit}
-                className='w-full flex flex-row gap-2 relative'>
-                <div className='flex w-full border border-black rounded-md'>
+                    : <div className='h-[60px]  w-full  bg-slate-200 flex flex-row justify-between p-2'>
+                      <form onSubmit={handleSubmit}
+                        className='w-full flex flex-row gap-2 relative'>
+                        <div className='flex w-full border border-black rounded-md'>
 
-                  <div className='flex h-full items-center justify-center text-2xl
+                          <div className='flex h-full items-center justify-center text-2xl
                     font-semibold px-3 rounded-l-md bg-white'>
-                    <p onClick={() => setShowemoji(!showEmoji)}
-                      className='cursor-pointer'>{showEmoji ? <RxCross1 /> : <BsEmojiGrin />}</p>
-                  </div >
+                            <p onClick={() => setShowemoji(!showEmoji)}
+                              className='cursor-pointer'>{showEmoji ? <RxCross1 /> : <BsEmojiGrin />}</p>
+                          </div >
 
-                  <input
-                    required
-                    placeholder='Type a message'
-                    onChange={(e) => setMsz(e.target.value)}
-                    value={msz}
-                    className='w-full  outline-none p-2 rounded-r-md text-xl  placeholder'
-                  />
-                </div>
-                <button>
-                  <SubmmitButton text={"Send"} />
-                </button>
+                          <input
+                            required
+                            placeholder='Type a message'
+                            onChange={(e) => setMsz(e.target.value)}
+                            value={msz}
+                            className='w-full  outline-none p-2 rounded-r-md text-xl  placeholder'
+                          />
+                        </div>
+                        <button>
+                          <SubmmitButton text={"Send"} />
+                        </button>
 
-                <div
-                  className={`${showEmoji ? "visible " : "invisible"} absolute -top-[480px] left-6`}>
-                  <EmojiPicker onEmojiClick={handleEmoji} />
-                </div>
-              </form>
+                        <div
+                          className={`${showEmoji ? "visible " : "invisible"} absolute -top-[480px] left-6`}>
+                          <EmojiPicker onEmojiClick={handleEmoji} />
+                        </div>
+                      </form>
+                    </div>
+                }
+
+              </div>
             </div>
-              }
 
-            </div>
+            {/* chat info */}
+            {
+              chatInfo &&
+              <div className='w-[40%] min-w-[280px] h-full  px-2'>
+                <ChatInfo
+                  ref={childRef}
+                  setChatInof={setChatInof}
+                  userData={userData}
+                  fetchUserData={fetchUserData}
+                  setCurrentChat={setCurrentChat}
+                  isUserLogin={isUserLogin}
+                />
+              </div>
+            }
           </div>
-
-          {/* chat info */}
-         {
-           chatInfo && 
-          <div className='w-[40%] h-full'>
-           <ChatInfo 
-           ref={childRef}
-           setChatInof={setChatInof} 
-           userData={userData} 
-           fetchUserData={fetchUserData}
-           setCurrentChat={setCurrentChat}
-           isUserLogin={isUserLogin}
-           />
-          </div>
-         }
-          </div>  
       }
     </div>
   )

@@ -30,7 +30,7 @@ const VeryfiEmail = () => {
         ...signupData,
         otp: otp
       }
-      createAccount(data)
+      createAccount(data,navigate)
     } else {
       toast.error('otp not filled')
     }
@@ -72,7 +72,7 @@ const VeryfiEmail = () => {
             onClick={handleSubmit}
             className="mt-6 rounded-[8px] bg-yellow-400 w-full hover:bg-yellow-500 py-[8px] px-[12px] font-medium text-richblack-900"
           >
-            Log In
+            Verify
           </button>
         </form>
       </div>

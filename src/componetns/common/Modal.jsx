@@ -4,7 +4,7 @@ import SubmmitButton from './SubmmitButton'
 const Modal = ({modalData}) => {
   return (
     <div className='fixed inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm'>
-    <div className='w-[23%] absolute bg-slate-400 border border-black p-6 rounded-md flex flex-col gap-2'>
+    <div className='w-[23%] min-w-[320px] absolute bg-slate-400 border border-black p-6 rounded-md flex flex-col gap-2'>
   
        <p className='text-xl font-semibold'>{modalData.text1}</p>
        <p>{modalData.text2}</p>

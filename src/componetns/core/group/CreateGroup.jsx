@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { createGroup } from '../../../service/operations/group';
 
 
-const CreateGroup = ({ setCreateGroup, contact }) => {
+const CreateGroup = ({ setCreateGroup, contact,isUserLogin }) => {
   const [members, setMembers] = useState([]);
   const [step,setStep] = useState(1);
   const {user} = useSelector((state) => state.user)
@@ -48,7 +48,7 @@ const CreateGroup = ({ setCreateGroup, contact }) => {
     // creating group
     createGroup(data)
     setCreateGroup(false)
-
+    isUserLogin();
   }
 
   const handleChange = (e) => {
@@ -62,7 +62,7 @@ const CreateGroup = ({ setCreateGroup, contact }) => {
 
   return (
     <div className='fixed inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm'>
-      <div className='border border-black w-[70%]  bg-slate-200 rounded-md p-4'>
+      <div className='border  min-w-[340px] border-black w-[70%]  bg-slate-200 rounded-md p-4'>
        {
         contact ?
         <div className='w-full h-full'>
@@ -137,24 +137,32 @@ const CreateGroup = ({ setCreateGroup, contact }) => {
      {
       step == 2 &&
       <div className='w-full h-full'>
-         <label>
-          <p>Group Name</p>
+        <div className='pb-2'>
+        <label>
+        <p className="mb-1  leading-[1.375rem] text-richblack-5"
+      >Group Name <sup className='text-pink-200'>*</sup></p>
           <input 
           required
           name='groupName'
           onChange={handleChange}
           placeholder='Group Name'
+          className='w-full  rounded-[0.5rem] bg-richblack-700 p-[12px] text-richblack-5 outline-none
+    border-b border-pure-greys-300'
           />
          </label> 
          <label>
-          <p>About</p>
+         <p className="mb-1  leading-[1.375rem] text-richblack-5"
+      >About <sup className='text-pink-200'>*</sup></p>
           <input 
           required
           name='groupDesc'
           onChange={handleChange}
-          placeholder='Opetional'
+          placeholder='Group Desc'
+          className='w-full  rounded-[0.5rem] bg-richblack-700 p-[12px] text-richblack-5 outline-none
+    border-b border-pure-greys-300'
           />
          </label>
+        </div>
          <SelectImage text={"Next"} getImgUrl={handleProfileImg}/>
       </div>
      }

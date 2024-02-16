@@ -5,7 +5,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
 import { Link, useNavigate } from 'react-router-dom';
 import chatImg from "../assets/chatImage.png"
 
-const Login = () => {
+const ForgotPassword = () => {
   const [formData,setFormData] = useState();
   const dispatch = useDispatch();
   const [shoPassword,setShowPassword] = useState(false);
@@ -20,7 +20,6 @@ const Login = () => {
 
   const handelSubmit = (e) => {
     e.preventDefault();
-    loginUser(formData,dispatch,navigate)
   }
   return (
     <div className='flex w-full h-screen  items-center justify-center flex-col gap-2 '>
@@ -90,4 +89,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default ForgotPassword

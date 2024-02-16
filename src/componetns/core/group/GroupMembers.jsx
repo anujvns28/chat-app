@@ -58,9 +58,9 @@ const GroupMembers = ({ member, groupInfo, setUserInof, fetchUserData }) => {
        <div>
         {
             admin &&
-            <div className='flex relative flex-row items-center justify-between py-2 cursor-pointer px-5 hover:bg-slate-500'>
+            <div className='flex relative flex-row items-center justify-between py-2 cursor-pointer px-2 hover:bg-slate-500'>
             <div onClick={() => handleClick(member)}
-            className='flex flex-row gap-3 items-center justify-start '>
+            className='flex flex-row gap-3 items-center '>
                 <img
                     src={member.image}
                     className='w-[50px] h-[50px] rounded-full'
@@ -70,8 +70,8 @@ const GroupMembers = ({ member, groupInfo, setUserInof, fetchUserData }) => {
 
             {
                 admin.includes(member._id) &&
-                <div className='border border-black rounded-md p-1 text-xs text-white'>
-                    Group Admin
+                <div className='border border-black w-fit rounded-md p-1 text-xs text-white'>
+                    Admin
                 </div>
             }
 

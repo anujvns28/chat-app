@@ -29,7 +29,8 @@ export const getOtp = async (email,navigate) => {
 }
 
 
-export const createAccount = async (data) => {
+export const createAccount = async (data,navigate) => {
+    const toastId = toast.loading("loading...")
     try {
         const response = await apiConnector("POST",
          SIGNUP_API,
@@ -39,13 +40,14 @@ export const createAccount = async (data) => {
           }
          );
         console.log("signup response", response);
-        
+        toast.success("Signup Successfully")
+        navigate("/login")
     }
     catch (error) {
         console.log("signup  RESPONSE  API ERROR....", error);
-       
+         toast.error("try Again")
     }
-
+    toast.dismiss(toastId)
 }
 
 export const loginUser = async (data,dispatch,navigate) => {
@@ -67,7 +69,7 @@ export const loginUser = async (data,dispatch,navigate) => {
     }
     catch (error) {
         console.log("Login  RESPONSE  API ERROR....", error);
-       toast.error("error occured in login")
+       toast.error(error.response.data.message)
     }
     toast.dismiss(toastId)
 

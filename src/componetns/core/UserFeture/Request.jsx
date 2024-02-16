@@ -45,7 +45,7 @@ const Request = ({setRequests}) => {
     console.log(allContact,"allcont")
     return (
         <div className='fixed inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm'>
-            <div className='w-[60%] h-auto bg-slate-400 min-h-[60%] min-w-[300px]'>
+            <div className='w-[60%] h-auto bg-slate-400 min-h-[40%] min-w-[300px]'>
                 <div className='w-full h-[70px] bg-slate-300 flex  items-end justify-start py-4 '>
                     <div className='flex flex-row gap-6 items-center justify-start  w-full pl-6 text-slate-100'>
                         <p onClick={() => setRequests(false)}
@@ -54,10 +54,10 @@ const Request = ({setRequests}) => {
                     </div>
                 </div>
 
-                <div className='flex flex-col gap-2 p-2'>
+                <div className='flex flex-col gap-2 p-2 '>
                   {
                     request ? 
-                    <div className='flex flex-col gap-2'>
+                    <div className='flex h-full py-4 flex-col gap-2 items-center justify-center'>
                         {
                             request.map((user,index) => {
                                 return !allContact.includes(user._id) && <div key={index} className='flex items-center justify-between border border-black p-1'>

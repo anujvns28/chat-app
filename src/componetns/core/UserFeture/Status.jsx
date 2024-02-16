@@ -74,7 +74,7 @@ const Status = ({setStatus,setAnuj,userData,contact}) => {
                          </div>
                         </div>
 
-                        <p className='text-xl font-semibold text-white'>Contacts</p>
+                        <p className='text-xl font-semibold text-white py-4'>Contacts</p>
                         <div className='flex flex-col gap-2'>
                         {
                           contact.map((data,index) => {
